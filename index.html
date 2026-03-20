@@ -309,8 +309,23 @@
     }
   }
 
-  // Autoplay on load; audio may require interaction on some browsers
-  window.addEventListener('load', start);
+  // Slideshow starts immediately; audio requires first user gesture (browser policy)
+  window.addEventListener('load', () => {
+    startSlideshow();
+  });
+
+  document.addEventListener('click', function once() {
+    document.removeEventListener('click', once);
+    loadTrack(0);
+    audio.volume = 0.7;
+    audio.play().catch(() => {});
+    try {
+      setupAnalyser();
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+    } catch(e) {
+      console.log('Beat detection unavailable:', e);
+    }
+  });
 
   // Keyboard controls
   document.addEventListener('keydown', (e) => {
