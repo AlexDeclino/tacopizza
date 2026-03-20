@@ -1,19 +1,425 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Taco Pizza</title>
-  <style>
-    body {
-      background-color: #000;
-      color: #fff;
-      font-family: 'Times New Roman', Times, serif;
-      margin: 0;
-      padding: 0;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Los chilitos enamorados 26</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #000;
+    overflow: hidden;
+    width: 100vw;
+    height: 100vh;
+    font-family: 'Arial Narrow', Arial, sans-serif;
+  }
+
+  /* Slideshow */
+  .slideshow {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .slide {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 5s ease-in-out;
+    mix-blend-mode: difference;
+  }
+
+  .slide.visible {
+    opacity: 1;
+  }
+
+  .slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: fill;
+    filter: contrast(1.15) saturate(1.3) brightness(1.05);
+  }
+
+/* Beat-reactive color overlay */
+  .beat-overlay {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0;
+    mix-blend-mode: color;
+    transition: opacity 0.05s;
+  }
+
+  /* Soft vignette overlay */
+  .vignette {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background: radial-gradient(ellipse at center, transparent 50%, rgba(0,0,0,0.4) 100%);
+    z-index: 2;
+  }
+
+  /* Player */
+  .player {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    z-index: 10;
+  }
+
+  .player-btn {
+    background: none;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    padding: 0;
+    opacity: 0.9;
+    transition: opacity 0.2s, transform 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 64px;
+    height: 64px;
+    position: relative;
+  }
+
+  .player-btn .heart-bg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .player-btn svg:not(.heart-bg) {
+    position: relative;
+    z-index: 1;
+  }
+
+  .player-btn:hover {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+
+  /* Lyrics */
+  .lyrics {
+    position: fixed;
+    inset: 0;
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    padding: 20px;
+  }
+
+  .lyrics-line {
+    font-family: 'Arial Narrow', Arial, sans-serif;
+    font-weight: bold;
+    color: #fff;
+    text-align: center;
+    text-transform: uppercase;
+    white-space: nowrap;
+    line-height: 1;
+    opacity: 0;
+    mix-blend-mode: multiply;
+  }
+
+  .lyrics-line.active {
+    animation: lyricPulse 7s ease-in-out forwards;
+  }
+
+  @keyframes lyricPulse {
+    0% { opacity: 0; }
+    42.8% { opacity: 1; }
+    57.1% { opacity: 1; }
+    100% { opacity: 0; }
+  }
+
+  .hidden { display: none !important; }
+</style>
 </head>
 <body>
+
+<!-- Slideshow -->
+<div class="slideshow" id="slideshow"></div>
+<div class="beat-overlay" id="beatOverlay"></div>
+<div class="vignette"></div>
+<div class="lyrics" id="lyrics">
+  <div class="lyrics-line" id="lyricsLine"></div>
+</div>
+<!-- Music player -->
+<div class="player" id="player">
+  <button class="player-btn" id="playBtn" title="Play/Pause">
+    <svg class="heart-bg" viewBox="0 0 24 24" fill="#e8203a"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+    <svg id="playIcon" width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M8 5v14l11-7z"/></svg>
+    <svg id="pauseIcon" width="20" height="20" viewBox="0 0 24 24" fill="#fff" class="hidden"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+  </button>
+</div>
+
+<audio id="audio" preload="auto" crossorigin="anonymous"></audio>
+
+<script>
+  const images = [
+    "images/2026-02-14 12.59.40.jpg",
+    "images/2026-02-14 12.59.52.jpg",
+    "images/2026-02-14 12.59.56.jpg",
+    "images/2026-02-14 12.59.58.jpg",
+    "images/2026-02-14 12.59.59.jpg",
+    "images/2026-02-14 13.00.01.jpg",
+    "images/2026-02-14 13.00.02.jpg",
+    "images/2026-02-14 13.00.04.jpg",
+    "images/2026-02-14 13.00.05.jpg",
+    "images/2026-02-14 13.00.07.jpg",
+    "images/2026-02-14 13.00.09.jpg",
+    "images/2026-02-14 13.00.11.jpg",
+    "images/2026-02-14 13.00.12.jpg",
+    "images/2026-02-14 13.00.16.jpg",
+    "images/2026-02-14 13.00.17.jpg",
+    "images/IMG_4670.jpg",
+    "images/IMG_4755.jpg",
+    "images/IMG_4803.jpg",
+    "images/IMG_4834.jpg",
+    "images/IMG_4838.jpg",
+    "images/IMG_4944.jpg",
+    "images/IMG_4973.jpg",
+    "images/IMG_5014.jpg",
+    "images/IMG_5059.jpg",
+    "images/IMG_5128.jpg",
+    "images/IMG_5246.jpg",
+    "images/IMG_5249.jpg",
+    "images/IMG_5285.jpg",
+    "images/IMG_5428.jpg",
+    "images/IMG_5544.jpg",
+    "images/IMG_5546.jpg",
+    "images/IMG_5663.jpg",
+    "images/IMG_5688.jpg",
+    "images/IMG_5690.jpg",
+    "images/IMG_5737.jpg",
+    "images/IMG_5738.jpg",
+    "IMG_5948.jpg",
+    "IMG_5949.jpg",
+    "images/IMG_5759.jpg",
+    "images/IMG_5776.jpg",
+    "images/IMG_5778.jpg",
+    "images/IMG_6063.jpg",
+    "images/IMG_6278.jpg"
+  ];
+
+  // Shuffle
+  for (let i = images.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [images[i], images[j]] = [images[j], images[i]];
+  }
+
+  const tracks = [
+    { src: "song/01 All Aboard Ft. Lil Wayne.mp3", name: "All Aboard Ft. Lil Wayne" },
+    { src: "song/12 Mambo.mp3", name: "Mambo" }
+  ];
+
+  const audio = document.getElementById('audio');
+  const slideshow = document.getElementById('slideshow');
+  const playBtn = document.getElementById('playBtn');
+  const playIcon = document.getElementById('playIcon');
+  const pauseIcon = document.getElementById('pauseIcon');
+
+  let currentSlide = 0;
+  let currentTrack = 0;
+  let slideInterval;
+
+  // Build slides
+  images.forEach((src, i) => {
+    const div = document.createElement('div');
+    div.className = 'slide' + (i === 0 ? ' visible' : '');
+    const img = document.createElement('img');
+    img.src = src;
+    img.alt = '';
+    img.loading = i < 3 ? 'eager' : 'lazy';
+    div.appendChild(img);
+    slideshow.appendChild(div);
+  });
+
+  const slides = document.querySelectorAll('.slide');
+
+  let slideHistory = [0]; // track visible slides
+
+  function nextSlide() {
+    currentSlide = (currentSlide + 1) % images.length;
+    // Fade in the new image
+    slides[currentSlide].classList.add('visible');
+    slideHistory.push(currentSlide);
+    // Fade out the image from 2 steps ago (it's been visible 10s)
+    if (slideHistory.length > 2) {
+      const old = slideHistory.shift();
+      slides[old].classList.remove('visible');
+    }
+  }
+
+  function startSlideshow() {
+    slideInterval = setInterval(nextSlide, 5000);
+  }
+
+  // Music player
+  function loadTrack(index) {
+    currentTrack = index;
+    audio.src = tracks[index].src;
+  }
+
+  function togglePlay() {
+    if (audio.paused) {
+      audio.play();
+    } else {
+      audio.pause();
+    }
+  }
+
+  audio.addEventListener('pause', () => {
+    playIcon.classList.remove('hidden');
+    pauseIcon.classList.add('hidden');
+  });
+
+  audio.addEventListener('ended', () => {
+    currentTrack = (currentTrack + 1) % tracks.length;
+    loadTrack(currentTrack);
+    audio.play();
+  });
+
+  playBtn.addEventListener('click', togglePlay);
+
+  // Lyrics
+  const lyrics = [
+    "Hey", "Escucha las palabras de Alex",
+    "Imagine that we are on the dance floor",
+    "Grinding on each other",
+    "We are a bit high",
+    "And images flash in our mind",
+    "This song plays", "You need this in your life", "Yeah", "Ven aquí",
+    "We grind slowly",
+    "Your body's making sounds like percussion",
+    "I'm orchestrating your fantasies",
+    "",
+    "And when you wake up feeling like a dream",
+    "You ain't go believe it, and everything you need, Girl, you going to receive it",
+    "I'ma let me make you feel alive", "Relax and feel the ride",
+    "There's one ticket left, and girl it's for you baby", "Girl you won't find this feeling no where (mami)",
+    "All aboard", "(Móntate, mami)",
+    "It's always a special occasion", "And it's on your layer with me",
+    "And when you wake up feeling like a dream",
+    "You ain't go believe it, and everything you need, Girl, you going to receive it",
+    "I'ma let me make you feel alive", "Relax and feel the ride",
+    "There's one ticket left, and girl it's for you baby", "Girl you won't find this feeling no where (mami)",
+    "She want to ride that Squirrel train", "So I am a bag her like baggage claim",
+    "We smoked that Mary not plain Jane", "And everything is just fine",
+    "I keep a picture of her smiling in the back of my mind",
+    "I grab the back of her head she throw it back like rewind",
+    "I put her face in the pillow, taste it a little",
+    "Shawty said she feel like she's sitting on a missile",
+    "I said 5-4-3-2, the one can only be you",
+    "Shawty said: Oh Lord, I'm coming, I said me too",
+    "My love has no equal, get on top",
+    "And if you ride this train, get off at your stop",
+    "There's one ticket left, and girl it's for you baby (mami)", "All aboard",
+    "All aboard, hahaha"
+  ];
+
+  const lyricsLine = document.getElementById('lyricsLine');
+  let currentLyric = 0;
+
+  function fitLyrics() {
+    const el = lyricsLine;
+    if (!el.textContent) return;
+    const maxW = window.innerWidth * 0.8;
+    el.style.fontSize = '10px';
+    const ratio = maxW / el.scrollWidth;
+    el.style.fontSize = Math.floor(10 * ratio) + 'px';
+  }
+
+  function showNextLyric() {
+    lyricsLine.classList.remove('active');
+    // Force reflow so animation restarts
+    void lyricsLine.offsetWidth;
+    lyricsLine.textContent = lyrics[currentLyric];
+    fitLyrics();
+    if (lyrics[currentLyric]) {
+      lyricsLine.classList.add('active');
+    }
+    currentLyric = (currentLyric + 1) % lyrics.length;
+  }
+
+  window.addEventListener('resize', fitLyrics);
+
+  // Beat-reactive color overlay
+  const beatOverlay = document.getElementById('beatOverlay');
+  const colors = ['#ff006e', '#ff4d6d', '#c9184a', '#ff758f', '#e80054', '#ff85a1'];
+  let audioCtx, analyser, dataArray;
+
+  audio.addEventListener('play', () => {
+    playIcon.classList.add('hidden');
+    pauseIcon.classList.remove('hidden');
+  });
+
+  function setupAnalyser() {
+    if (audioCtx) return;
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    analyser = audioCtx.createAnalyser();
+    analyser.fftSize = 256;
+    analyser.smoothingTimeConstant = 0.3;
+    const source = audioCtx.createMediaElementSource(audio);
+    source.connect(analyser);
+    analyser.connect(audioCtx.destination);
+    dataArray = new Uint8Array(analyser.frequencyBinCount);
+
+    let lastBeatTime = 0;
+    (function beatLoop() {
+      requestAnimationFrame(beatLoop);
+      analyser.getByteFrequencyData(dataArray);
+      // Sub-bass only (bins 0-3, ~0-170Hz)
+      let bass = 0;
+      for (let i = 0; i < 4; i++) bass += dataArray[i];
+      bass /= 4;
+      const now = performance.now();
+      if (bass > 200 && now - lastBeatTime > 150) {
+        lastBeatTime = now;
+        beatOverlay.style.background = colors[Math.floor(Math.random() * colors.length)];
+        beatOverlay.style.opacity = 0.5;
+      } else {
+        const fade = parseFloat(beatOverlay.style.opacity || 0);
+        beatOverlay.style.opacity = Math.max(0, fade - 0.04);
+      }
+    })();
+  }
+
+  // Start on first user interaction (required for audio)
+  function start() {
+    loadTrack(0);
+    audio.volume = 0.7;
+    audio.play();
+    startSlideshow();
+    showNextLyric();
+    setInterval(showNextLyric, 7000);
+
+    // Try to set up beat detection — if it fails (e.g. CORS on file://), audio still plays fine
+    try {
+      setupAnalyser();
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+    } catch(e) {
+      console.log('Beat detection unavailable:', e);
+    }
+  }
+
+  document.addEventListener('click', function once() {
+    document.removeEventListener('click', once);
+    start();
+  });
+
+  // Keyboard controls
+  document.addEventListener('keydown', (e) => {
+    if (e.code === 'Space') { e.preventDefault(); togglePlay(); }
+  });
+</script>
 </body>
 </html>
