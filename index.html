@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Los chilitos enamorados 26</title>
+<title>TACO MEETS PIZZA</title>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -105,41 +105,6 @@
     transform: scale(1.1);
   }
 
-  /* Lyrics */
-  .lyrics {
-    position: fixed;
-    inset: 0;
-    z-index: 3;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    pointer-events: none;
-    padding: 20px;
-  }
-
-  .lyrics-line {
-    font-family: 'Arial Narrow', Arial, sans-serif;
-    font-weight: bold;
-    color: #fff;
-    text-align: center;
-    text-transform: uppercase;
-    white-space: nowrap;
-    line-height: 1;
-    opacity: 0;
-    mix-blend-mode: multiply;
-  }
-
-  .lyrics-line.active {
-    animation: lyricPulse 7s ease-in-out forwards;
-  }
-
-  @keyframes lyricPulse {
-    0% { opacity: 0; }
-    42.8% { opacity: 1; }
-    57.1% { opacity: 1; }
-    100% { opacity: 0; }
-  }
-
   .hidden { display: none !important; }
 </style>
 </head>
@@ -149,9 +114,6 @@
 <div class="slideshow" id="slideshow"></div>
 <div class="beat-overlay" id="beatOverlay"></div>
 <div class="vignette"></div>
-<div class="lyrics" id="lyrics">
-  <div class="lyrics-line" id="lyricsLine"></div>
-</div>
 <!-- Music player -->
 <div class="player" id="player">
   <button class="player-btn" id="playBtn" title="Play/Pause">
@@ -290,68 +252,6 @@
 
   playBtn.addEventListener('click', togglePlay);
 
-  // Lyrics
-  const lyrics = [
-    "Hey", "Escucha las palabras de Alex",
-    "Imagine that we are on the dance floor",
-    "Grinding on each other",
-    "We are a bit high",
-    "And images flash in our mind",
-    "This song plays", "You need this in your life", "Yeah", "Ven aquí",
-    "We grind slowly",
-    "Your body's making sounds like percussion",
-    "I'm orchestrating your fantasies",
-    "",
-    "And when you wake up feeling like a dream",
-    "You ain't go believe it, and everything you need, Girl, you going to receive it",
-    "I'ma let me make you feel alive", "Relax and feel the ride",
-    "There's one ticket left, and girl it's for you baby", "Girl you won't find this feeling no where (mami)",
-    "All aboard", "(Móntate, mami)",
-    "It's always a special occasion", "And it's on your layer with me",
-    "And when you wake up feeling like a dream",
-    "You ain't go believe it, and everything you need, Girl, you going to receive it",
-    "I'ma let me make you feel alive", "Relax and feel the ride",
-    "There's one ticket left, and girl it's for you baby", "Girl you won't find this feeling no where (mami)",
-    "She want to ride that Squirrel train", "So I am a bag her like baggage claim",
-    "We smoked that Mary not plain Jane", "And everything is just fine",
-    "I keep a picture of her smiling in the back of my mind",
-    "I grab the back of her head she throw it back like rewind",
-    "I put her face in the pillow, taste it a little",
-    "Shawty said she feel like she's sitting on a missile",
-    "I said 5-4-3-2, the one can only be you",
-    "Shawty said: Oh Lord, I'm coming, I said me too",
-    "My love has no equal, get on top",
-    "And if you ride this train, get off at your stop",
-    "There's one ticket left, and girl it's for you baby (mami)", "All aboard",
-    "All aboard, hahaha"
-  ];
-
-  const lyricsLine = document.getElementById('lyricsLine');
-  let currentLyric = 0;
-
-  function fitLyrics() {
-    const el = lyricsLine;
-    if (!el.textContent) return;
-    const maxW = window.innerWidth * 0.8;
-    el.style.fontSize = '10px';
-    const ratio = maxW / el.scrollWidth;
-    el.style.fontSize = Math.floor(10 * ratio) + 'px';
-  }
-
-  function showNextLyric() {
-    lyricsLine.classList.remove('active');
-    // Force reflow so animation restarts
-    void lyricsLine.offsetWidth;
-    lyricsLine.textContent = lyrics[currentLyric];
-    fitLyrics();
-    if (lyrics[currentLyric]) {
-      lyricsLine.classList.add('active');
-    }
-    currentLyric = (currentLyric + 1) % lyrics.length;
-  }
-
-  window.addEventListener('resize', fitLyrics);
-
   // Beat-reactive color overlay
   const beatOverlay = document.getElementById('beatOverlay');
   const colors = ['#ff006e', '#ff4d6d', '#c9184a', '#ff758f', '#e80054', '#ff85a1'];
@@ -397,10 +297,8 @@
   function start() {
     loadTrack(0);
     audio.volume = 0.7;
-    audio.play();
+    audio.play().catch(() => {});
     startSlideshow();
-    showNextLyric();
-    setInterval(showNextLyric, 7000);
 
     // Try to set up beat detection — if it fails (e.g. CORS on file://), audio still plays fine
     try {
@@ -411,10 +309,8 @@
     }
   }
 
-  document.addEventListener('click', function once() {
-    document.removeEventListener('click', once);
-    start();
-  });
+  // Autoplay on load; audio may require interaction on some browsers
+  window.addEventListener('load', start);
 
   // Keyboard controls
   document.addEventListener('keydown', (e) => {
