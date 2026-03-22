@@ -27,17 +27,25 @@
 
     nav {
       display: flex;
-      justify-content: center;
+      justify-content: space-between;
       flex-wrap: nowrap;
-      gap: clamp(12px, 3vw, 40px);
-      padding: 18px clamp(12px, 3vw, 40px);
+      gap: 0;
+      padding: 18px clamp(16px, 4vw, 60px);
+    }
+
+    nav a + a::before {
+      content: '|';
+      color: #000;
+      margin: 0 clamp(10px, 2vw, 32px);
+      font-weight: 300;
+      opacity: 0.3;
     }
 
     nav a {
       text-decoration: none;
       color: #000;
-      font-size: clamp(11px, 1.4vw, 17px);
-      letter-spacing: 0.1em;
+      font-size: clamp(13px, 1.4vw, 18px);
+      letter-spacing: 0.08em;
       text-transform: uppercase;
       cursor: pointer;
       display: flex;
@@ -59,7 +67,7 @@
     }
 
 
-    /* ── Home SVG ── */
+    /* ── Home ── */
     .home-center {
       position: fixed;
       top: 60px;
@@ -67,27 +75,41 @@
       left: 0;
       right: 0;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 5vw;
-      z-index: 1;
+      padding: clamp(20px, 4vw, 60px);
+      gap: clamp(10px, 2vw, 20px);
       pointer-events: none;
+      z-index: 1;
+    }
+
+    .home-title {
+      font-family: 'Times New Roman', Times, serif;
+      font-size: clamp(13px, 1.6vw, 20px);
+      text-align: center;
+      color: #000;
+      max-width: 560px;
+      line-height: 1.5;
     }
 
     .home-svg-stack {
       position: relative;
+      flex: 1 1 0;
+      min-height: 0;
       max-width: 100%;
-      max-height: 100%;
-      width: auto;
-      height: auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .home-svg {
       display: block;
       max-width: 100%;
-      max-height: calc(100vh - 120px - 10vw);
+      max-height: 100%;
       width: auto;
       height: auto;
+      object-fit: contain;
     }
 
     .home-svg-heart {
@@ -126,14 +148,16 @@
     .page.active { display: block; }
 
     #page-home {
-      background: transparent;
-      pointer-events: none;
+      background: #f0f0f0;
+      pointer-events: auto;
     }
 
     .content {
       max-width: 700px;
       margin: 0 auto;
       padding: 50px 24px 80px;
+      position: relative;
+      z-index: 1;
     }
 
     .page-title {
@@ -157,28 +181,10 @@
       padding: 18px clamp(12px, 3vw, 40px);
     }
 
-    .countdown {
-      display: flex;
-      justify-content: center;
-      gap: clamp(12px, 3vw, 40px);
-    }
-
-    .countdown div {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    .countdown span {
-      font-size: clamp(14px, 2vw, 22px);
-      line-height: 1;
-    }
-
-    .countdown label {
-      font-size: 11px;
-      letter-spacing: 0.1em;
+    .save-the-date {
+      font-size: clamp(13px, 1.4vw, 18px);
+      letter-spacing: 0.08em;
       text-transform: uppercase;
-      margin-top: 4px;
     }
 
 
@@ -200,6 +206,20 @@
 
     .btn:hover, .btn-outline:hover {
       background: #000;
+      color: #fff;
+    }
+
+    .btn-red {
+      background: #FF0000;
+      color: #fff;
+      border-color: #FF0000;
+      flex: 1;
+      text-align: center;
+    }
+
+    .btn-red:hover {
+      background: #cc0000;
+      border-color: #cc0000;
       color: #fff;
     }
 
@@ -274,7 +294,7 @@
     .payment-btns {
       display: flex;
       gap: 16px;
-      flex-wrap: wrap;
+      flex-wrap: nowrap;
       margin-bottom: 48px;
     }
 
@@ -410,11 +430,11 @@
       .gallery-grid { columns: 2; }
 
       nav {
-        gap: clamp(8px, 2vw, 16px);
-        padding: 12px clamp(8px, 2vw, 16px);
+        gap: 0;
+        padding: 12px clamp(10px, 3vw, 20px);
       }
 
-      nav a { font-size: clamp(9px, 2.8vw, 13px); gap: 4px; }
+      nav a { font-size: clamp(10px, 3.2vw, 14px); gap: 3px; }
 
       footer {
         gap: 12px;
@@ -423,10 +443,7 @@
         justify-content: center;
       }
 
-      .countdown { gap: 10px; }
-      .countdown span { font-size: 20px; }
-
-      .content { padding: 50px 16px 80px; }
+.content { padding: 50px 16px 80px; }
 
       .home-center { top: 50px; bottom: 50px; padding: 4vw; }
 
@@ -451,7 +468,7 @@
     /* ── Floating hearts ── */
     .float-heart {
       position: fixed;
-      z-index: 15;
+      z-index: 0;
       pointer-events: none;
     }
 
@@ -488,84 +505,58 @@
         <img src="svg/path1.svg" alt="" class="home-svg">
         <img src="svg/path3.svg" alt="" class="home-svg-heart">
       </div>
+      <p class="home-title">One year ago, a Pizza met a little Taco and filled her up with some melty mozzarella cheese. The little Taco went nuts and became obsessed with the Pizza. Little Taco used some her witchy powers to put a spell on the Pizza, making him hers forever. We are happy to invite you to a new culinary exploration of Taco&amp;Pizza on the 26th of June, 2026 in NYC.</p>
     </div>
   </section>
 
   <footer>
-    <div class="countdown" id="countdown">
-      <div><span id="cd-days">--</span><label>Days</label></div>
-      <div><span id="cd-hours">--</span><label>Hours</label></div>
-      <div><span id="cd-mins">--</span><label>Minutes</label></div>
-      <div><span id="cd-secs">--</span><label>Seconds</label></div>
-    </div>
-    <button class="btn btn-pink" onclick="activatePage('rsvp')">RSVP</button>
+    <span class="save-the-date" style="background:#FF0000;color:#fff;padding:4px 12px;">26 June 2026, NYC</span>
   </footer>
 
-  <!-- ── Floating hearts (all pages) ── -->
-  <img src="svg/path3.svg" alt="" class="float-heart" style="width:32px;top:12%;left:8%;">
-  <img src="svg/path3.svg" alt="" class="float-heart" style="width:20px;top:70%;left:5%;">
-  <img src="svg/path3.svg" alt="" class="float-heart" style="width:28px;top:25%;right:7%;">
-  <img src="svg/path3.svg" alt="" class="float-heart" style="width:18px;top:60%;right:4%;">
-  <img src="svg/path3.svg" alt="" class="float-heart" style="width:24px;top:82%;left:50%;">
 
   <!-- ── SCHEDULE ── -->
   <section id="page-schedule" class="page">
     <div class="content">
-      <h2 class="page-title">Schedule</h2>
 
       <div class="venue-block">
-        <p class="event-date">Friday, June 25</p>
-        <h3>Welcome Dinner</h3>
-        <p class="event-time-loc">7:00 PM · Food Bazaar · Astoria, NY</p>
+        <p class="event-date">Thursday, 25 June</p>
+        <h3>Welcome Drinks</h3>
+        <p class="event-time-loc">8:00 PM · Anable Basin · Long Island City, NY 11101</p>
         <div class="cal-btns">
           <a class="btn-outline" target="_blank"
-            href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Welcome+Dinner+%E2%80%93+Alessandro+%26+Jovanna&dates=20260625T230000Z%2F20260626T020000Z&location=Food+Bazaar+Astoria+NY&details=Welcome+Dinner+before+the+wedding+celebration.">Add to Google Calendar</a>
-          <button class="btn-outline" onclick="downloadEventICS('20260625T230000Z','20260626T020000Z','Welcome Dinner \u2013 Alessandro & Jovanna','Food Bazaar, Astoria, NY','Welcome Dinner before the wedding celebration.')">Add to Apple Calendar</button>
+            href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Welcome+Drinks+%E2%80%93+Alessandro+%26+Jovanna&dates=20260626T000000Z%2F20260626T030000Z&location=4-40+44th+Dr+Long+Island+City+NY+11101&details=Welcome+Drinks.">Add to Google Calendar</a>
+          <button class="btn-outline" onclick="downloadEventICS('20260626T000000Z','20260626T030000Z','Welcome Drinks \u2013 Alessandro & Jovanna','4-40 44th Dr, Long Island City, NY 11101','Welcome Drinks.')">Add to Apple Calendar</button>
         </div>
         <iframe class="map-embed" loading="lazy"
-          src="https://maps.google.com/maps?q=Food+Bazaar+Astoria+NY&output=embed">
+          src="https://maps.google.com/maps?q=4-40+44th+Dr+Long+Island+City+NY+11101&output=embed">
         </iframe>
       </div>
 
       <div class="venue-block">
-        <p class="event-date">Saturday, June 26</p>
-        <h3>Ceremony</h3>
-        <p class="event-time-loc">4:00 PM · 3086 44th Street · Astoria, NY</p>
+        <p class="event-date">Friday, 26 June</p>
+        <h3>Friends Ceremony + Cake! + Party</h3>
+        <p class="event-time-loc">8:00 PM · Decatur Audio Laboratories · Brooklyn, NY</p>
         <div class="cal-btns">
           <a class="btn-outline" target="_blank"
-            href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Ceremony+%E2%80%93+Alessandro+%26+Jovanna&dates=20260626T200000Z%2F20260626T213000Z&location=3086+44th+Street+Astoria+NY&details=Wedding+Ceremony.">Add to Google Calendar</a>
-          <button class="btn-outline" onclick="downloadEventICS('20260626T200000Z','20260626T213000Z','Ceremony \u2013 Alessandro & Jovanna','3086 44th Street, Astoria, NY','Wedding Ceremony.')">Add to Apple Calendar</button>
+            href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Friends+Ceremony+%2B+Cake!+%2B+Party+%E2%80%93+Alessandro+%26+Jovanna&dates=20260627T000000Z%2F20260627T040000Z&location=Decatur+Audio+Laboratories+Brooklyn+NY&details=Friends+Ceremony+%2B+Cake!+%2B+Party.">Add to Google Calendar</a>
+          <button class="btn-outline" onclick="downloadEventICS('20260627T000000Z','20260627T040000Z','Friends Ceremony + Cake! + Party \u2013 Alessandro & Jovanna','Decatur Audio Laboratories, Brooklyn, NY','Friends Ceremony + Cake! + Party.')">Add to Apple Calendar</button>
         </div>
         <iframe class="map-embed" loading="lazy"
-          src="https://maps.google.com/maps?q=3086+44th+Street+Astoria+NY&output=embed">
+          src="https://maps.google.com/maps?q=Decatur+Audio+Laboratories+Brooklyn+NY&output=embed">
         </iframe>
       </div>
 
       <div class="venue-block">
-        <p class="event-date">Saturday, June 26</p>
-        <h3>Cocktail Hour</h3>
-        <p class="event-time-loc">5:30 PM · 3086 44th Street · Astoria, NY</p>
+        <p class="event-date">Saturday, 27 June</p>
+        <h3>Chill Time</h3>
+        <p class="event-time-loc">5:00 PM · Concert Groove Pavilion · Prospect Park, Brooklyn, NY</p>
         <div class="cal-btns">
           <a class="btn-outline" target="_blank"
-            href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Cocktail+Hour+%E2%80%93+Alessandro+%26+Jovanna&dates=20260626T213000Z%2F20260626T230000Z&location=3086+44th+Street+Astoria+NY&details=Cocktail+Hour.">Add to Google Calendar</a>
-          <button class="btn-outline" onclick="downloadEventICS('20260626T213000Z','20260626T230000Z','Cocktail Hour \u2013 Alessandro & Jovanna','3086 44th Street, Astoria, NY','Cocktail Hour.')">Add to Apple Calendar</button>
+            href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Chill+Time+%E2%80%93+Alessandro+%26+Jovanna&dates=20260627T210000Z%2F20260628T010000Z&location=Concert+Groove+Pavilion+Prospect+Park+Brooklyn+NY&details=Chill+Time.">Add to Google Calendar</a>
+          <button class="btn-outline" onclick="downloadEventICS('20260627T210000Z','20260628T010000Z','Chill Time \u2013 Alessandro & Jovanna','Concert Groove Pavilion, Prospect Park, Brooklyn, NY','Chill Time.')">Add to Apple Calendar</button>
         </div>
         <iframe class="map-embed" loading="lazy"
-          src="https://maps.google.com/maps?q=3086+44th+Street+Astoria+NY&output=embed">
-        </iframe>
-      </div>
-
-      <div class="venue-block">
-        <p class="event-date">Saturday, June 26</p>
-        <h3>Reception & Dinner</h3>
-        <p class="event-time-loc">7:00 PM · 3086 44th Street · Astoria, NY</p>
-        <div class="cal-btns">
-          <a class="btn-outline" target="_blank"
-            href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Reception+%26+Dinner+%E2%80%93+Alessandro+%26+Jovanna&dates=20260626T230000Z%2F20260627T030000Z&location=3086+44th+Street+Astoria+NY&details=Wedding+Reception+and+Dinner.">Add to Google Calendar</a>
-          <button class="btn-outline" onclick="downloadEventICS('20260626T230000Z','20260627T030000Z','Reception & Dinner \u2013 Alessandro & Jovanna','3086 44th Street, Astoria, NY','Wedding Reception and Dinner.')">Add to Apple Calendar</button>
-        </div>
-        <iframe class="map-embed" loading="lazy"
-          src="https://maps.google.com/maps?q=3086+44th+Street+Astoria+NY&output=embed">
+          src="https://maps.google.com/maps?q=Concert+Groove+Pavilion+Prospect+Park+Brooklyn+NY&output=embed">
         </iframe>
       </div>
 
@@ -576,64 +567,23 @@
   <!-- ── REGISTRY ── -->
   <section id="page-registry" class="page">
     <div class="content">
-      <h2 class="page-title">Registry</h2>
-
       <p class="registry-intro">In lieu of traditional gifts, we would love your contribution to our honeymoon fund. Your generosity means the world to us.</p>
 
       <div class="payment-btns">
-        <a class="btn" href="https://venmo.com/Jovanna-Venegas" target="_blank">Venmo @Jovanna-Venegas</a>
-        <a class="btn" href="https://paypal.me/solposta" target="_blank">PayPal sol.posta@gmail.com</a>
+        <a class="btn btn-red" href="https://venmo.com/Jovanna-Venegas" target="_blank">Venmo</a>
+        <a class="btn btn-red" href="https://paypal.me/solposta" target="_blank">PayPal</a>
       </div>
 
-      <hr class="divider">
-      <p class="section-label">Leave a Message</p>
-
-      <form id="messageForm">
-        <div class="form-row">
-          <label>Your Name</label>
-          <input type="text" name="name" required>
-        </div>
-        <div class="form-row">
-          <label>Your Message</label>
-          <textarea name="message" required></textarea>
-        </div>
-        <button type="submit" class="btn">Send</button>
-        <p class="form-msg" id="msgStatus"></p>
-      </form>
-
-      <hr class="divider">
-      <p class="section-label">Send an E-Card</p>
-
-      <div class="ecard-preview" id="ecardPreview">
-        <p class="ecard-names">Alessandro & Jovanna</p>
-        <p class="ecard-date">June 26, 2026</p>
-        <p class="ecard-msg" id="ecardMsg">Your message will appear here.</p>
-        <p class="ecard-from" id="ecardFrom"></p>
-      </div>
-
-      <div class="form-row">
-        <label>Your Name</label>
-        <input type="text" id="ecardName" placeholder="e.g. Maria">
-      </div>
-      <div class="form-row">
-        <label>Your Message</label>
-        <textarea id="ecardText" placeholder="Write something beautiful..."></textarea>
-      </div>
     </div>
   </section>
 
   <!-- ── GALLERY ── -->
   <section id="page-gallery" class="page">
     <div class="content">
-      <h2 class="page-title">Gallery</h2>
-
-      <div class="gallery-upload" onclick="document.getElementById('photoInput').click()">
+      <div class="gallery-upload" onclick="window.open('https://www.dropbox.com/request/MbbyqCY5p8DDntPPX5z4','_blank')">
         <p>Share your photos from our celebration</p>
         <button class="btn-outline">Upload Photos</button>
-        <input type="file" id="photoInput" multiple accept="image/*" style="display:none">
       </div>
-
-      <div class="gallery-grid" id="galleryGrid"></div>
     </div>
   </section>
 
@@ -641,7 +591,6 @@
   <!-- ── RSVP ── -->
   <section id="page-rsvp" class="page">
     <div class="content">
-      <h2 class="page-title">RSVP</h2>
 
       <form id="rsvpForm">
         <div class="form-row">
@@ -692,21 +641,23 @@
         a.classList.toggle('active', a.dataset.page === id);
       });
       document.querySelector('footer').style.display = id === 'home' ? '' : 'none';
-      spawnRandomHearts();
+      spawnRandomHearts(id);
+location.hash = id;
     }
 
     document.querySelectorAll('nav a').forEach(a => {
       a.addEventListener('click', () => activatePage(a.dataset.page));
     });
 
-    document.querySelector('nav a[data-page="home"]').classList.add('active');
+    const validPages = ['home','schedule','registry','gallery','rsvp'];
+    const initialPage = validPages.includes(location.hash.slice(1)) ? location.hash.slice(1) : 'home';
+    activatePage(initialPage);
 
 
-    /* ── Countdown ── */
-    const wedding = new Date('2026-06-26T16:00:00');
+    /* ── Countdown removed ── */
     function updateCountdown() {
-      const diff = wedding - Date.now();
-      if (diff <= 0) { document.getElementById('countdown').textContent = '🎉 Today!'; return; }
+      const diff = new Date('2026-06-26T16:00:00') - Date.now();
+      if (diff <= 0) return;
       const d = Math.floor(diff / 86400000);
       const h = Math.floor((diff % 86400000) / 3600000);
       const m = Math.floor((diff % 3600000) / 60000);
@@ -802,18 +753,9 @@
       }
     });
 
-    /* ── Gallery upload (local preview) ── */
-    document.getElementById('photoInput').addEventListener('change', e => {
-      const grid = document.getElementById('galleryGrid');
-      [...e.target.files].forEach(file => {
-        const img = document.createElement('img');
-        img.src = URL.createObjectURL(file);
-        img.alt = '';
-        grid.appendChild(img);
-      });
-    });
 
-  /* ── Heart beat + flip (JS-driven, no CSS animation conflict) ── */
+
+/* ── Heart beat + flip (JS-driven, no CSS animation conflict) ── */
   function initFloatingHeart(el) {
     (function randomFlip() {
       el.style.transform = Math.random() > 0.5 ? 'scaleX(-1)' : 'scaleX(1)';
@@ -823,11 +765,13 @@
 
   document.querySelectorAll('.float-heart').forEach(initFloatingHeart);
 
-  /* ── Spawn random hearts on page change ── */
-  function spawnRandomHearts() {
+  /* ── Spawn random hearts on page change (not on home) ── */
+  function spawnRandomHearts(pageId) {
     document.querySelectorAll('.float-heart-random').forEach(h => h.remove());
-    const count = 3 + Math.floor(Math.random() * 4);
-    for (let i = 0; i < count; i++) {
+    if (pageId === 'home') return;
+    const page = document.getElementById('page-' + pageId);
+    if (!page) return;
+    for (let i = 0; i < 10; i++) {
       const h = document.createElement('img');
       h.src = 'svg/path3.svg';
       h.className = 'float-heart float-heart-random';
@@ -835,11 +779,10 @@
       h.style.width = size + 'px';
       h.style.top  = (8  + Math.random() * 82) + '%';
       h.style.left = (4  + Math.random() * 88) + '%';
-      document.body.appendChild(h);
+      page.appendChild(h);
       initFloatingHeart(h);
     }
   }
-  spawnRandomHearts();
 
 
   </script>
