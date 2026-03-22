@@ -62,23 +62,31 @@
     /* ── Home SVG ── */
     .home-center {
       position: fixed;
-      inset: 0;
+      top: 60px;
+      bottom: 60px;
+      left: 0;
+      right: 0;
       display: flex;
       align-items: center;
       justify-content: center;
+      padding: 5vw;
       z-index: 1;
       pointer-events: none;
     }
 
     .home-svg-stack {
       position: relative;
-      max-width: 80vw;
-      max-height: 80vh;
+      max-width: 100%;
+      max-height: 100%;
+      width: auto;
+      height: auto;
     }
 
     .home-svg {
       display: block;
-      width: 100%;
+      max-width: 100%;
+      max-height: calc(100vh - 120px - 10vw);
+      width: auto;
       height: auto;
     }
 
@@ -196,14 +204,14 @@
     }
 
     .btn-pink {
-      background: #FF0000;
+      background: #000;
       color: #fff;
-      border-color: #FF0000;
+      border: none;
     }
 
     .btn-pink:hover {
-      background: #d4006e;
-      border-color: #d4006e;
+      background: #FF0000;
+      border: none;
     }
 
     .btn-group {
@@ -400,10 +408,37 @@
 
     @media (max-width: 600px) {
       .gallery-grid { columns: 2; }
+
+      nav {
+        gap: clamp(8px, 2vw, 16px);
+        padding: 12px clamp(8px, 2vw, 16px);
+      }
+
+      nav a { font-size: clamp(9px, 2.8vw, 13px); gap: 4px; }
+
+      footer {
+        gap: 12px;
+        padding: 12px 16px;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      .countdown { gap: 10px; }
+      .countdown span { font-size: 20px; }
+
+      .content { padding: 50px 16px 80px; }
+
+      .home-center { top: 50px; bottom: 50px; padding: 4vw; }
+
+      .home-svg { max-height: calc(100vh - 100px - 8vw); }
+
+      .cal-btns { flex-direction: column; }
+
+      .btn-group { flex-direction: column; align-items: flex-start; }
     }
 
-    /* ── Travel ── */
-    .venue-block { margin-bottom: 40px; }
+    /* ── Travel / Schedule blocks ── */
+    .venue-block { margin-bottom: 48px; }
 
     .venue-block h3 {
       font-size: 20px;
@@ -412,6 +447,24 @@
     }
 
     .venue-block p { font-size: 14px; color: #555; margin-bottom: 12px; }
+
+    /* ── Floating hearts ── */
+    .float-heart {
+      position: fixed;
+      z-index: 15;
+      pointer-events: none;
+    }
+
+    @keyframes particle-fly {
+      0%   { opacity: 1; transform: translate(0,0) scale(1); }
+      100% { opacity: 0; transform: translate(var(--pdx), var(--pdy)) scale(0.1); }
+    }
+
+    .event-date { font-size: 12px; text-transform: uppercase; letter-spacing: 0.12em; color: #999; margin-bottom: 2px !important; }
+
+    .event-time-loc { font-size: 14px; color: #555; margin-bottom: 10px !important; }
+
+    .cal-btns { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 14px; }
 
   </style>
 </head>
@@ -423,7 +476,6 @@
       <a data-page="schedule"><span class="marker">☙</span>Schedule</a>
       <a data-page="registry"><span class="marker">☙</span>Registry</a>
       <a data-page="gallery"><span class="marker">☙</span>Gallery</a>
-      <a data-page="travel"><span class="marker">☙</span>Travel</a>
       <a data-page="rsvp"><span class="marker">☙</span>RSVP</a>
     </nav>
   </header>
@@ -449,57 +501,75 @@
     <button class="btn btn-pink" onclick="activatePage('rsvp')">RSVP</button>
   </footer>
 
+  <!-- ── Floating hearts (all pages) ── -->
+  <img src="svg/path3.svg" alt="" class="float-heart" style="width:32px;top:12%;left:8%;">
+  <img src="svg/path3.svg" alt="" class="float-heart" style="width:20px;top:70%;left:5%;">
+  <img src="svg/path3.svg" alt="" class="float-heart" style="width:28px;top:25%;right:7%;">
+  <img src="svg/path3.svg" alt="" class="float-heart" style="width:18px;top:60%;right:4%;">
+  <img src="svg/path3.svg" alt="" class="float-heart" style="width:24px;top:82%;left:50%;">
+
   <!-- ── SCHEDULE ── -->
   <section id="page-schedule" class="page">
     <div class="content">
       <h2 class="page-title">Schedule</h2>
 
-      <div class="schedule-day">
-        <h3>Friday, June 25</h3>
-        <div class="event">
-          <p class="event-time">7:00 PM</p>
-          <div>
-            <p class="event-name">Welcome Dinner</p>
-            <p class="event-loc">Food Bazaar · Astoria, NY</p>
-          </div>
+      <div class="venue-block">
+        <p class="event-date">Friday, June 25</p>
+        <h3>Welcome Dinner</h3>
+        <p class="event-time-loc">7:00 PM · Food Bazaar · Astoria, NY</p>
+        <div class="cal-btns">
+          <a class="btn-outline" target="_blank"
+            href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Welcome+Dinner+%E2%80%93+Alessandro+%26+Jovanna&dates=20260625T230000Z%2F20260626T020000Z&location=Food+Bazaar+Astoria+NY&details=Welcome+Dinner+before+the+wedding+celebration.">Add to Google Calendar</a>
+          <button class="btn-outline" onclick="downloadEventICS('20260625T230000Z','20260626T020000Z','Welcome Dinner \u2013 Alessandro & Jovanna','Food Bazaar, Astoria, NY','Welcome Dinner before the wedding celebration.')">Add to Apple Calendar</button>
         </div>
+        <iframe class="map-embed" loading="lazy"
+          src="https://maps.google.com/maps?q=Food+Bazaar+Astoria+NY&output=embed">
+        </iframe>
       </div>
 
-      <div class="schedule-day">
-        <h3>Saturday, June 26</h3>
-        <div class="event">
-          <p class="event-time">4:00 PM</p>
-          <div>
-            <p class="event-name">Ceremony</p>
-            <p class="event-loc">3086 44th Street · Astoria, NY</p>
-          </div>
+      <div class="venue-block">
+        <p class="event-date">Saturday, June 26</p>
+        <h3>Ceremony</h3>
+        <p class="event-time-loc">4:00 PM · 3086 44th Street · Astoria, NY</p>
+        <div class="cal-btns">
+          <a class="btn-outline" target="_blank"
+            href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Ceremony+%E2%80%93+Alessandro+%26+Jovanna&dates=20260626T200000Z%2F20260626T213000Z&location=3086+44th+Street+Astoria+NY&details=Wedding+Ceremony.">Add to Google Calendar</a>
+          <button class="btn-outline" onclick="downloadEventICS('20260626T200000Z','20260626T213000Z','Ceremony \u2013 Alessandro & Jovanna','3086 44th Street, Astoria, NY','Wedding Ceremony.')">Add to Apple Calendar</button>
         </div>
-        <div class="event">
-          <p class="event-time">5:30 PM</p>
-          <div>
-            <p class="event-name">Cocktail Hour</p>
-            <p class="event-loc">3086 44th Street · Astoria, NY</p>
-          </div>
+        <iframe class="map-embed" loading="lazy"
+          src="https://maps.google.com/maps?q=3086+44th+Street+Astoria+NY&output=embed">
+        </iframe>
+      </div>
+
+      <div class="venue-block">
+        <p class="event-date">Saturday, June 26</p>
+        <h3>Cocktail Hour</h3>
+        <p class="event-time-loc">5:30 PM · 3086 44th Street · Astoria, NY</p>
+        <div class="cal-btns">
+          <a class="btn-outline" target="_blank"
+            href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Cocktail+Hour+%E2%80%93+Alessandro+%26+Jovanna&dates=20260626T213000Z%2F20260626T230000Z&location=3086+44th+Street+Astoria+NY&details=Cocktail+Hour.">Add to Google Calendar</a>
+          <button class="btn-outline" onclick="downloadEventICS('20260626T213000Z','20260626T230000Z','Cocktail Hour \u2013 Alessandro & Jovanna','3086 44th Street, Astoria, NY','Cocktail Hour.')">Add to Apple Calendar</button>
         </div>
-        <div class="event">
-          <p class="event-time">7:00 PM</p>
-          <div>
-            <p class="event-name">Reception & Dinner</p>
-            <p class="event-loc">3086 44th Street · Astoria, NY</p>
-          </div>
+        <iframe class="map-embed" loading="lazy"
+          src="https://maps.google.com/maps?q=3086+44th+Street+Astoria+NY&output=embed">
+        </iframe>
+      </div>
+
+      <div class="venue-block">
+        <p class="event-date">Saturday, June 26</p>
+        <h3>Reception & Dinner</h3>
+        <p class="event-time-loc">7:00 PM · 3086 44th Street · Astoria, NY</p>
+        <div class="cal-btns">
+          <a class="btn-outline" target="_blank"
+            href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Reception+%26+Dinner+%E2%80%93+Alessandro+%26+Jovanna&dates=20260626T230000Z%2F20260627T030000Z&location=3086+44th+Street+Astoria+NY&details=Wedding+Reception+and+Dinner.">Add to Google Calendar</a>
+          <button class="btn-outline" onclick="downloadEventICS('20260626T230000Z','20260627T030000Z','Reception & Dinner \u2013 Alessandro & Jovanna','3086 44th Street, Astoria, NY','Wedding Reception and Dinner.')">Add to Apple Calendar</button>
         </div>
+        <iframe class="map-embed" loading="lazy"
+          src="https://maps.google.com/maps?q=3086+44th+Street+Astoria+NY&output=embed">
+        </iframe>
       </div>
 
       <p class="dress-code">Dress Code — Casual</p>
-
-      <div class="btn-group">
-        <a class="btn-outline" href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Alessandro+%26+Jovanna+Wedding&dates=20260626T200000Z%2F20260627T030000Z&details=Join+us+for+our+wedding+celebration!&location=3086+44th+Street+Astoria+NY" target="_blank">Add to Google Calendar</a>
-        <button class="btn-outline" onclick="downloadICS()">Download .ics</button>
-      </div>
-
-      <iframe class="map-embed" loading="lazy"
-        src="https://maps.google.com/maps?q=3086+44th+Street+Astoria+NY&output=embed">
-      </iframe>
     </div>
   </section>
 
@@ -567,28 +637,6 @@
     </div>
   </section>
 
-  <!-- ── TRAVEL ── -->
-  <section id="page-travel" class="page">
-    <div class="content">
-      <h2 class="page-title">Travel</h2>
-
-      <div class="venue-block">
-        <h3>Welcome Dinner</h3>
-        <p>Food Bazaar · Astoria, NY</p>
-        <iframe class="map-embed" loading="lazy"
-          src="https://maps.google.com/maps?q=Food+Bazaar+Astoria+NY&output=embed">
-        </iframe>
-      </div>
-
-      <div class="venue-block">
-        <h3>Ceremony & Reception</h3>
-        <p>3086 44th Street · Astoria, NY 11103</p>
-        <iframe class="map-embed" loading="lazy"
-          src="https://maps.google.com/maps?q=3086+44th+Street+Astoria+NY+11103&output=embed">
-        </iframe>
-      </div>
-    </div>
-  </section>
 
   <!-- ── RSVP ── -->
   <section id="page-rsvp" class="page">
@@ -643,6 +691,8 @@
       document.querySelectorAll('nav a').forEach(a => {
         a.classList.toggle('active', a.dataset.page === id);
       });
+      document.querySelector('footer').style.display = id === 'home' ? '' : 'none';
+      spawnRandomHearts();
     }
 
     document.querySelectorAll('nav a').forEach(a => {
@@ -669,21 +719,21 @@
     updateCountdown();
     setInterval(updateCountdown, 1000);
 
-    /* ── ICS Download ── */
-    function downloadICS() {
+    /* ── ICS Download (per event) ── */
+    function downloadEventICS(dtstart, dtend, summary, location, description) {
       const ics = [
         'BEGIN:VCALENDAR', 'VERSION:2.0',
         'BEGIN:VEVENT',
-        'DTSTART:20260626T200000Z',
-        'DTEND:20260627T030000Z',
-        'SUMMARY:Alessandro & Jovanna Wedding',
-        'LOCATION:3086 44th Street\\, Astoria\\, NY 11103',
-        'DESCRIPTION:Join us for our wedding celebration!',
+        'DTSTART:' + dtstart,
+        'DTEND:' + dtend,
+        'SUMMARY:' + summary,
+        'LOCATION:' + location.replace(/,/g, '\\,'),
+        'DESCRIPTION:' + description,
         'END:VEVENT', 'END:VCALENDAR'
       ].join('\r\n');
       const a = Object.assign(document.createElement('a'), {
         href: URL.createObjectURL(new Blob([ics], { type: 'text/calendar' })),
-        download: 'alessandro-jovanna-wedding.ics'
+        download: summary.replace(/[^a-z0-9]/gi, '-').toLowerCase() + '.ics'
       });
       a.click();
     }
@@ -762,6 +812,35 @@
         grid.appendChild(img);
       });
     });
+
+  /* ── Heart beat + flip (JS-driven, no CSS animation conflict) ── */
+  function initFloatingHeart(el) {
+    (function randomFlip() {
+      el.style.transform = Math.random() > 0.5 ? 'scaleX(-1)' : 'scaleX(1)';
+      setTimeout(randomFlip, 800 + Math.random() * 3000);
+    })();
+  }
+
+  document.querySelectorAll('.float-heart').forEach(initFloatingHeart);
+
+  /* ── Spawn random hearts on page change ── */
+  function spawnRandomHearts() {
+    document.querySelectorAll('.float-heart-random').forEach(h => h.remove());
+    const count = 3 + Math.floor(Math.random() * 4);
+    for (let i = 0; i < count; i++) {
+      const h = document.createElement('img');
+      h.src = 'svg/path3.svg';
+      h.className = 'float-heart float-heart-random';
+      const size = 12 + Math.random() * 26;
+      h.style.width = size + 'px';
+      h.style.top  = (8  + Math.random() * 82) + '%';
+      h.style.left = (4  + Math.random() * 88) + '%';
+      document.body.appendChild(h);
+      initFloatingHeart(h);
+    }
+  }
+  spawnRandomHearts();
+
 
   </script>
 
