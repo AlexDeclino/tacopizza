@@ -1,336 +1,769 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TACO MEETS PIZZA</title>
-<style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Alessandro & Jovanna</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fleur+De+Leah&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
-  body {
-    background: #000;
-    overflow: hidden;
-    width: 100vw;
-    height: 100vh;
-    font-family: 'Arial Narrow', Arial, sans-serif;
-  }
+    body {
+      background: #f0f0f0;
+      font-family: 'Times New Roman', Times, serif;
+      color: #000;
+    }
 
-  /* Slideshow */
-  .slideshow {
-    position: fixed;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-  }
+    /* ── Header ── */
+    header {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%;
+      background: #f0f0f0;
+      z-index: 200;
+    }
 
-  .slide {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    opacity: 0;
-    transition: opacity 5s ease-in-out;
-    mix-blend-mode: difference;
-  }
+    nav {
+      display: flex;
+      justify-content: center;
+      flex-wrap: nowrap;
+      gap: clamp(12px, 3vw, 40px);
+      padding: 18px clamp(12px, 3vw, 40px);
+    }
 
-  .slide.visible {
-    opacity: 1;
-  }
+    nav a {
+      text-decoration: none;
+      color: #000;
+      font-size: clamp(11px, 1.4vw, 17px);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      cursor: pointer;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 6px;
+    }
 
-  .slide img {
-    width: 100%;
-    height: 100%;
-    object-fit: fill;
-    filter: contrast(1.15) saturate(1.3) brightness(1.05);
-  }
+    nav a:hover { color: #ff2d8f; }
 
-/* Beat-reactive color overlay */
-  .beat-overlay {
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    z-index: 1;
-    opacity: 0;
-    mix-blend-mode: color;
-    transition: opacity 0.05s;
-  }
+    nav a .marker {
+      display: inline;
+      opacity: 0;
+      font-size: 14px;
+    }
 
-  /* Soft vignette overlay */
-  .vignette {
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    background: radial-gradient(ellipse at center, transparent 50%, rgba(0,0,0,0.4) 100%);
-    z-index: 2;
-  }
+    nav a.active .marker {
+      opacity: 1;
+    }
 
-  /* Player */
-  .player {
-    position: fixed;
-    bottom: 20px;
-    left: 20px;
-    z-index: 10;
-  }
 
-  .player-btn {
-    background: none;
-    border: none;
-    color: #fff;
-    cursor: pointer;
-    padding: 0;
-    opacity: 0.9;
-    transition: opacity 0.2s, transform 0.2s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 64px;
-    height: 64px;
-    position: relative;
-  }
+    /* ── Home SVG ── */
+    .home-center {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1;
+      pointer-events: none;
+    }
 
-  .player-btn .heart-bg {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-  }
+    .home-svg-stack {
+      position: relative;
+      max-width: 80vw;
+      max-height: 80vh;
+    }
 
-  .player-btn svg:not(.heart-bg) {
-    position: relative;
-    z-index: 1;
-  }
+    .home-svg {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
 
-  .player-btn:hover {
-    opacity: 1;
-    transform: scale(1.1);
-  }
+    .home-svg-heart {
+      position: absolute;
+      top: 0%;
+      left: calc(50% + 50px);
+      transform: translateX(-50%) scaleX(-1);
+      width: 8%;
+      height: auto;
+      transform-origin: center bottom;
+      animation: heartbeat 0.8s ease-in-out infinite;
+    }
 
-  .hidden { display: none !important; }
-</style>
+    @keyframes heartbeat {
+      0%   { transform: translateX(-50%) scaleX(-1) scale(1); }
+      14%  { transform: translateX(-50%) scaleX(-1) scale(1.3); }
+      28%  { transform: translateX(-50%) scaleX(-1) scale(1); }
+      42%  { transform: translateX(-50%) scaleX(-1) scale(1.2); }
+      70%  { transform: translateX(-50%) scaleX(-1) scale(1); }
+      100% { transform: translateX(-50%) scaleX(-1) scale(1); }
+    }
+
+
+    /* ── Pages ── */
+    .page {
+      display: none;
+      position: fixed;
+      inset: 0;
+      overflow-y: auto;
+      z-index: 10;
+      background: #f0f0f0;
+      padding-top: 60px;
+      padding-bottom: 50px;
+    }
+
+    .page.active { display: block; }
+
+    #page-home {
+      background: transparent;
+      pointer-events: none;
+    }
+
+    .content {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 50px 24px 80px;
+    }
+
+    .page-title {
+      font-size: 52px;
+      font-style: italic;
+      font-weight: normal;
+      margin-bottom: 48px;
+    }
+
+    /* ── Footer (mirrors header) ── */
+    footer {
+      position: fixed;
+      bottom: 0; left: 0;
+      width: 100%;
+      background: #f0f0f0;
+      z-index: 200;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: clamp(12px, 3vw, 40px);
+      padding: 18px clamp(12px, 3vw, 40px);
+    }
+
+    .countdown {
+      display: flex;
+      justify-content: center;
+      gap: clamp(12px, 3vw, 40px);
+    }
+
+    .countdown div {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .countdown span {
+      font-size: clamp(14px, 2vw, 22px);
+      line-height: 1;
+    }
+
+    .countdown label {
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-top: 4px;
+    }
+
+
+    /* ── Buttons ── */
+    .btn, .btn-outline {
+      display: inline-block;
+      font-family: 'Times New Roman', Times, serif;
+      font-size: 13px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      text-decoration: none;
+      cursor: pointer;
+      border: 1px solid #000;
+      padding: 10px 28px;
+      background: none;
+      color: #000;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .btn:hover, .btn-outline:hover {
+      background: #000;
+      color: #fff;
+    }
+
+    .btn-pink {
+      background: #ff2d8f;
+      color: #fff;
+      border-color: #ff2d8f;
+    }
+
+    .btn-pink:hover {
+      background: #d4006e;
+      border-color: #d4006e;
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 32px;
+    }
+
+    /* ── Schedule ── */
+    .schedule-day { margin-bottom: 40px; }
+
+    .schedule-day h3 {
+      font-size: 13px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      border-bottom: 1px solid #000;
+      padding-bottom: 8px;
+      margin-bottom: 20px;
+    }
+
+    .event {
+      display: grid;
+      grid-template-columns: 80px 1fr;
+      gap: 0 20px;
+      margin-bottom: 16px;
+    }
+
+    .event-time {
+      font-size: 13px;
+      color: #666;
+      padding-top: 2px;
+    }
+
+    .event-name { font-size: 18px; font-style: italic; }
+    .event-loc  { font-size: 13px; color: #555; margin-top: 2px; grid-column: 2; }
+
+    .dress-code {
+      font-size: 13px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin: 32px 0;
+    }
+
+    .map-embed {
+      width: 100%;
+      height: 300px;
+      border: none;
+      margin-top: 40px;
+    }
+
+    /* ── Registry ── */
+    .registry-intro {
+      font-size: 17px;
+      line-height: 1.7;
+      margin-bottom: 36px;
+      max-width: 480px;
+    }
+
+    .payment-btns {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 48px;
+    }
+
+    .divider {
+      border: none;
+      border-top: 1px solid #ddd;
+      margin: 40px 0;
+    }
+
+    .section-label {
+      font-size: 13px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+
+    /* ── Forms ── */
+    .form-row {
+      margin-bottom: 24px;
+    }
+
+    .form-row label {
+      display: block;
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+      color: #555;
+    }
+
+    .form-row input,
+    .form-row textarea,
+    .form-row select {
+      width: 100%;
+      border: none;
+      border-bottom: 1px solid #000;
+      padding: 8px 0;
+      font-family: 'Times New Roman', Times, serif;
+      font-size: 16px;
+      background: transparent;
+      outline: none;
+      color: #000;
+      border-radius: 0;
+    }
+
+    .form-row textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    .radio-group {
+      display: flex;
+      gap: 24px;
+      margin-top: 4px;
+    }
+
+    .radio-group label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      letter-spacing: 0;
+      text-transform: none;
+      color: #000;
+      cursor: pointer;
+    }
+
+    .form-msg {
+      margin-top: 16px;
+      font-size: 14px;
+      font-style: italic;
+    }
+
+    /* ── E-card ── */
+    .ecard-preview {
+      border: 1px solid #000;
+      padding: 40px;
+      text-align: center;
+      margin: 20px 0 24px;
+      min-height: 200px;
+    }
+
+    .ecard-preview .ecard-names {
+      font-family: 'Fleur De Leah', cursive;
+      font-size: 40px;
+      margin-bottom: 8px;
+    }
+
+    .ecard-preview .ecard-date {
+      font-size: 12px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+      color: #555;
+    }
+
+    .ecard-preview .ecard-msg {
+      font-size: 16px;
+      font-style: italic;
+      line-height: 1.6;
+    }
+
+    .ecard-preview .ecard-from {
+      margin-top: 16px;
+      font-size: 13px;
+      color: #555;
+    }
+
+    /* ── Gallery ── */
+    .gallery-upload {
+      border: 1px dashed #999;
+      padding: 40px;
+      text-align: center;
+      margin-bottom: 40px;
+      cursor: pointer;
+    }
+
+    .gallery-upload p { color: #666; font-size: 15px; margin-bottom: 12px; }
+
+    .gallery-grid {
+      columns: 3;
+      column-gap: 12px;
+    }
+
+    .gallery-grid img {
+      width: 100%;
+      display: block;
+      margin-bottom: 12px;
+      break-inside: avoid;
+    }
+
+    @media (max-width: 600px) {
+      .gallery-grid { columns: 2; }
+    }
+
+    /* ── Travel ── */
+    .venue-block { margin-bottom: 40px; }
+
+    .venue-block h3 {
+      font-size: 20px;
+      font-style: italic;
+      margin-bottom: 4px;
+    }
+
+    .venue-block p { font-size: 14px; color: #555; margin-bottom: 12px; }
+
+  </style>
 </head>
 <body>
 
-<!-- Slideshow -->
-<div class="slideshow" id="slideshow"></div>
-<div class="beat-overlay" id="beatOverlay"></div>
-<div class="vignette"></div>
-<!-- Music player -->
-<div class="player" id="player">
-  <button class="player-btn" id="playBtn" title="Play/Pause">
-    <svg class="heart-bg" viewBox="0 0 24 24" fill="#e8203a"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-    <svg id="playIcon" width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M8 5v14l11-7z"/></svg>
-    <svg id="pauseIcon" width="20" height="20" viewBox="0 0 24 24" fill="#fff" class="hidden"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
-  </button>
-</div>
+  <header>
+    <nav id="nav">
+      <a data-page="home"><span class="marker">☙</span>Home</a>
+      <a data-page="schedule"><span class="marker">☙</span>Schedule</a>
+      <a data-page="registry"><span class="marker">☙</span>Registry</a>
+      <a data-page="gallery"><span class="marker">☙</span>Gallery</a>
+      <a data-page="travel"><span class="marker">☙</span>Travel</a>
+      <a data-page="rsvp"><span class="marker">☙</span>RSVP</a>
+    </nav>
+  </header>
 
-<audio id="audio" preload="auto" crossorigin="anonymous"></audio>
 
-<script>
-  const images = [
-    "images/2026-02-14 12.59.40.jpg",
-    "images/2026-02-14 12.59.52.jpg",
-    "images/2026-02-14 12.59.56.jpg",
-    "images/2026-02-14 12.59.58.jpg",
-    "images/2026-02-14 12.59.59.jpg",
-    "images/2026-02-14 13.00.01.jpg",
-    "images/2026-02-14 13.00.02.jpg",
-    "images/2026-02-14 13.00.04.jpg",
-    "images/2026-02-14 13.00.05.jpg",
-    "images/2026-02-14 13.00.07.jpg",
-    "images/2026-02-14 13.00.09.jpg",
-    "images/2026-02-14 13.00.11.jpg",
-    "images/2026-02-14 13.00.12.jpg",
-    "images/2026-02-14 13.00.16.jpg",
-    "images/2026-02-14 13.00.17.jpg",
-    "images/IMG_4670.jpg",
-    "images/IMG_4755.jpg",
-    "images/IMG_4803.jpg",
-    "images/IMG_4834.jpg",
-    "images/IMG_4838.jpg",
-    "images/IMG_4944.jpg",
-    "images/IMG_4973.jpg",
-    "images/IMG_5014.jpg",
-    "images/IMG_5059.jpg",
-    "images/IMG_5128.jpg",
-    "images/IMG_5246.jpg",
-    "images/IMG_5249.jpg",
-    "images/IMG_5285.jpg",
-    "images/IMG_5428.jpg",
-    "images/IMG_5544.jpg",
-    "images/IMG_5546.jpg",
-    "images/IMG_5663.jpg",
-    "images/IMG_5688.jpg",
-    "images/IMG_5690.jpg",
-    "images/IMG_5737.jpg",
-    "images/IMG_5738.jpg",
-    "IMG_5948.jpg",
-    "IMG_5949.jpg",
-    "images/IMG_5759.jpg",
-    "images/IMG_5776.jpg",
-    "images/IMG_5778.jpg",
-    "images/IMG_6063.jpg",
-    "images/IMG_6278.jpg"
-  ];
+  <!-- ── HOME ── -->
+  <section id="page-home" class="page active">
+    <div class="home-center">
+      <div class="home-svg-stack">
+        <img src="svg/path1.svg" alt="" class="home-svg">
+        <img src="svg/path3.svg" alt="" class="home-svg-heart">
+      </div>
+    </div>
+  </section>
 
-  // Shuffle
-  for (let i = images.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [images[i], images[j]] = [images[j], images[i]];
-  }
+  <footer>
+    <div class="countdown" id="countdown">
+      <div><span id="cd-days">--</span><label>Days</label></div>
+      <div><span id="cd-hours">--</span><label>Hours</label></div>
+      <div><span id="cd-mins">--</span><label>Minutes</label></div>
+      <div><span id="cd-secs">--</span><label>Seconds</label></div>
+    </div>
+    <button class="btn btn-pink" onclick="activatePage('rsvp')">RSVP</button>
+  </footer>
 
-  const tracks = [
-    { src: "song/01 All Aboard Ft. Lil Wayne.mp3", name: "All Aboard Ft. Lil Wayne" },
-    { src: "song/12 Mambo.mp3", name: "Mambo" }
-  ];
+  <!-- ── SCHEDULE ── -->
+  <section id="page-schedule" class="page">
+    <div class="content">
+      <h2 class="page-title">Schedule</h2>
 
-  const audio = document.getElementById('audio');
-  const slideshow = document.getElementById('slideshow');
-  const playBtn = document.getElementById('playBtn');
-  const playIcon = document.getElementById('playIcon');
-  const pauseIcon = document.getElementById('pauseIcon');
+      <div class="schedule-day">
+        <h3>Friday, June 25</h3>
+        <div class="event">
+          <p class="event-time">7:00 PM</p>
+          <div>
+            <p class="event-name">Welcome Dinner</p>
+            <p class="event-loc">Food Bazaar · Astoria, NY</p>
+          </div>
+        </div>
+      </div>
 
-  let currentSlide = 0;
-  let currentTrack = 0;
-  let slideInterval;
+      <div class="schedule-day">
+        <h3>Saturday, June 26</h3>
+        <div class="event">
+          <p class="event-time">4:00 PM</p>
+          <div>
+            <p class="event-name">Ceremony</p>
+            <p class="event-loc">3086 44th Street · Astoria, NY</p>
+          </div>
+        </div>
+        <div class="event">
+          <p class="event-time">5:30 PM</p>
+          <div>
+            <p class="event-name">Cocktail Hour</p>
+            <p class="event-loc">3086 44th Street · Astoria, NY</p>
+          </div>
+        </div>
+        <div class="event">
+          <p class="event-time">7:00 PM</p>
+          <div>
+            <p class="event-name">Reception & Dinner</p>
+            <p class="event-loc">3086 44th Street · Astoria, NY</p>
+          </div>
+        </div>
+      </div>
 
-  // Build slides
-  images.forEach((src, i) => {
-    const div = document.createElement('div');
-    div.className = 'slide' + (i === 0 ? ' visible' : '');
-    const img = document.createElement('img');
-    img.src = src;
-    img.alt = '';
-    img.loading = i < 3 ? 'eager' : 'lazy';
-    div.appendChild(img);
-    slideshow.appendChild(div);
-  });
+      <p class="dress-code">Dress Code — Casual</p>
 
-  const slides = document.querySelectorAll('.slide');
+      <div class="btn-group">
+        <a class="btn-outline" href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Alessandro+%26+Jovanna+Wedding&dates=20260626T200000Z%2F20260627T030000Z&details=Join+us+for+our+wedding+celebration!&location=3086+44th+Street+Astoria+NY" target="_blank">Add to Google Calendar</a>
+        <button class="btn-outline" onclick="downloadICS()">Download .ics</button>
+      </div>
 
-  let slideHistory = [0]; // track visible slides
+      <iframe class="map-embed" loading="lazy"
+        src="https://maps.google.com/maps?q=3086+44th+Street+Astoria+NY&output=embed">
+      </iframe>
+    </div>
+  </section>
 
-  function nextSlide() {
-    currentSlide = (currentSlide + 1) % images.length;
-    // Fade in the new image
-    slides[currentSlide].classList.add('visible');
-    slideHistory.push(currentSlide);
-    // Fade out the image from 2 steps ago (it's been visible 10s)
-    if (slideHistory.length > 2) {
-      const old = slideHistory.shift();
-      slides[old].classList.remove('visible');
+  <!-- ── REGISTRY ── -->
+  <section id="page-registry" class="page">
+    <div class="content">
+      <h2 class="page-title">Registry</h2>
+
+      <p class="registry-intro">In lieu of traditional gifts, we would love your contribution to our honeymoon fund. Your generosity means the world to us.</p>
+
+      <div class="payment-btns">
+        <a class="btn" href="https://venmo.com/Jovanna-Venegas" target="_blank">Venmo @Jovanna-Venegas</a>
+        <a class="btn" href="https://paypal.me/solposta" target="_blank">PayPal sol.posta@gmail.com</a>
+      </div>
+
+      <hr class="divider">
+      <p class="section-label">Leave a Message</p>
+
+      <form id="messageForm">
+        <div class="form-row">
+          <label>Your Name</label>
+          <input type="text" name="name" required>
+        </div>
+        <div class="form-row">
+          <label>Your Message</label>
+          <textarea name="message" required></textarea>
+        </div>
+        <button type="submit" class="btn">Send</button>
+        <p class="form-msg" id="msgStatus"></p>
+      </form>
+
+      <hr class="divider">
+      <p class="section-label">Send an E-Card</p>
+
+      <div class="ecard-preview" id="ecardPreview">
+        <p class="ecard-names">Alessandro & Jovanna</p>
+        <p class="ecard-date">June 26, 2026</p>
+        <p class="ecard-msg" id="ecardMsg">Your message will appear here.</p>
+        <p class="ecard-from" id="ecardFrom"></p>
+      </div>
+
+      <div class="form-row">
+        <label>Your Name</label>
+        <input type="text" id="ecardName" placeholder="e.g. Maria">
+      </div>
+      <div class="form-row">
+        <label>Your Message</label>
+        <textarea id="ecardText" placeholder="Write something beautiful..."></textarea>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── GALLERY ── -->
+  <section id="page-gallery" class="page">
+    <div class="content">
+      <h2 class="page-title">Gallery</h2>
+
+      <div class="gallery-upload" onclick="document.getElementById('photoInput').click()">
+        <p>Share your photos from our celebration</p>
+        <button class="btn-outline">Upload Photos</button>
+        <input type="file" id="photoInput" multiple accept="image/*" style="display:none">
+      </div>
+
+      <div class="gallery-grid" id="galleryGrid"></div>
+    </div>
+  </section>
+
+  <!-- ── TRAVEL ── -->
+  <section id="page-travel" class="page">
+    <div class="content">
+      <h2 class="page-title">Travel</h2>
+
+      <div class="venue-block">
+        <h3>Welcome Dinner</h3>
+        <p>Food Bazaar · Astoria, NY</p>
+        <iframe class="map-embed" loading="lazy"
+          src="https://maps.google.com/maps?q=Food+Bazaar+Astoria+NY&output=embed">
+        </iframe>
+      </div>
+
+      <div class="venue-block">
+        <h3>Ceremony & Reception</h3>
+        <p>3086 44th Street · Astoria, NY 11103</p>
+        <iframe class="map-embed" loading="lazy"
+          src="https://maps.google.com/maps?q=3086+44th+Street+Astoria+NY+11103&output=embed">
+        </iframe>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── RSVP ── -->
+  <section id="page-rsvp" class="page">
+    <div class="content">
+      <h2 class="page-title">RSVP</h2>
+
+      <form id="rsvpForm">
+        <div class="form-row">
+          <label>Full Name *</label>
+          <input type="text" name="name" required>
+        </div>
+        <div class="form-row">
+          <label>Email *</label>
+          <input type="email" name="email" required>
+        </div>
+        <div class="form-row">
+          <label>Will you attend?</label>
+          <div class="radio-group">
+            <label><input type="radio" name="attending" value="Yes" required> Yes, I'll be there</label>
+            <label><input type="radio" name="attending" value="No"> Unable to attend</label>
+          </div>
+        </div>
+        <div class="form-row">
+          <label>Number of Guests</label>
+          <select name="guests">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <label>Dietary Restrictions</label>
+          <input type="text" name="dietary" placeholder="e.g. vegetarian, gluten-free">
+        </div>
+        <div class="form-row">
+          <label>Message to the Couple</label>
+          <textarea name="message"></textarea>
+        </div>
+        <button type="submit" class="btn">Submit RSVP</button>
+        <p class="form-msg" id="rsvpStatus"></p>
+      </form>
+    </div>
+  </section>
+
+
+  <script>
+    /* ── Navigation ── */
+    function activatePage(id) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.getElementById('page-' + id).classList.add('active');
+      document.querySelectorAll('nav a').forEach(a => {
+        a.classList.toggle('active', a.dataset.page === id);
+      });
     }
-  }
 
-  function startSlideshow() {
-    slideInterval = setInterval(nextSlide, 5000);
-  }
+    document.querySelectorAll('nav a').forEach(a => {
+      a.addEventListener('click', () => activatePage(a.dataset.page));
+    });
 
-  // Music player
-  function loadTrack(index) {
-    currentTrack = index;
-    audio.src = tracks[index].src;
-  }
+    document.querySelector('nav a[data-page="home"]').classList.add('active');
 
-  function togglePlay() {
-    if (audio.paused) {
-      audio.play();
-    } else {
-      audio.pause();
+
+    /* ── Countdown ── */
+    const wedding = new Date('2026-06-26T16:00:00');
+    function updateCountdown() {
+      const diff = wedding - Date.now();
+      if (diff <= 0) { document.getElementById('countdown').textContent = '🎉 Today!'; return; }
+      const d = Math.floor(diff / 86400000);
+      const h = Math.floor((diff % 86400000) / 3600000);
+      const m = Math.floor((diff % 3600000) / 60000);
+      const s = Math.floor((diff % 60000) / 1000);
+      document.getElementById('cd-days').textContent  = String(d).padStart(2, '0');
+      document.getElementById('cd-hours').textContent = String(h).padStart(2, '0');
+      document.getElementById('cd-mins').textContent  = String(m).padStart(2, '0');
+      document.getElementById('cd-secs').textContent  = String(s).padStart(2, '0');
     }
-  }
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
 
-  audio.addEventListener('pause', () => {
-    playIcon.classList.remove('hidden');
-    pauseIcon.classList.add('hidden');
-  });
+    /* ── ICS Download ── */
+    function downloadICS() {
+      const ics = [
+        'BEGIN:VCALENDAR', 'VERSION:2.0',
+        'BEGIN:VEVENT',
+        'DTSTART:20260626T200000Z',
+        'DTEND:20260627T030000Z',
+        'SUMMARY:Alessandro & Jovanna Wedding',
+        'LOCATION:3086 44th Street\\, Astoria\\, NY 11103',
+        'DESCRIPTION:Join us for our wedding celebration!',
+        'END:VEVENT', 'END:VCALENDAR'
+      ].join('\r\n');
+      const a = Object.assign(document.createElement('a'), {
+        href: URL.createObjectURL(new Blob([ics], { type: 'text/calendar' })),
+        download: 'alessandro-jovanna-wedding.ics'
+      });
+      a.click();
+    }
 
-  audio.addEventListener('ended', () => {
-    currentTrack = (currentTrack + 1) % tracks.length;
-    loadTrack(currentTrack);
-    audio.play();
-  });
+    /* ── E-Card live preview ── */
+    document.getElementById('ecardName').addEventListener('input', e => {
+      document.getElementById('ecardFrom').textContent = e.target.value ? '— ' + e.target.value : '';
+    });
+    document.getElementById('ecardText').addEventListener('input', e => {
+      document.getElementById('ecardMsg').textContent = e.target.value || 'Your message will appear here.';
+    });
 
-  playBtn.addEventListener('click', togglePlay);
+    /* ── Registry message form ── */
+    /*
+      SETUP: Create a Make.com webhook scenario that writes to Notion.
+      1. Go to make.com → Create scenario → Webhooks → Custom Webhook → Copy URL
+      2. Add Notion action → Create Database Item → map fields: name, message, type
+      3. Paste your webhook URL below as MAKE_WEBHOOK_URL
+    */
+    const MAKE_WEBHOOK_URL = 'YOUR_MAKE_WEBHOOK_URL_HERE';
 
-  // Beat-reactive color overlay
-  const beatOverlay = document.getElementById('beatOverlay');
-  const colors = ['#ff006e', '#ff4d6d', '#c9184a', '#ff758f', '#e80054', '#ff85a1'];
-  let audioCtx, analyser, dataArray;
-
-  audio.addEventListener('play', () => {
-    playIcon.classList.add('hidden');
-    pauseIcon.classList.remove('hidden');
-  });
-
-  function setupAnalyser() {
-    if (audioCtx) return;
-    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    analyser = audioCtx.createAnalyser();
-    analyser.fftSize = 256;
-    analyser.smoothingTimeConstant = 0.3;
-    const source = audioCtx.createMediaElementSource(audio);
-    source.connect(analyser);
-    analyser.connect(audioCtx.destination);
-    dataArray = new Uint8Array(analyser.frequencyBinCount);
-
-    let lastBeatTime = 0;
-    (function beatLoop() {
-      requestAnimationFrame(beatLoop);
-      analyser.getByteFrequencyData(dataArray);
-      // Sub-bass only (bins 0-3, ~0-170Hz)
-      let bass = 0;
-      for (let i = 0; i < 4; i++) bass += dataArray[i];
-      bass /= 4;
-      const now = performance.now();
-      if (bass > 200 && now - lastBeatTime > 150) {
-        lastBeatTime = now;
-        beatOverlay.style.background = colors[Math.floor(Math.random() * colors.length)];
-        beatOverlay.style.opacity = 0.5;
-      } else {
-        const fade = parseFloat(beatOverlay.style.opacity || 0);
-        beatOverlay.style.opacity = Math.max(0, fade - 0.04);
+    document.getElementById('messageForm').addEventListener('submit', async e => {
+      e.preventDefault();
+      const fd = new FormData(e.target);
+      const status = document.getElementById('msgStatus');
+      try {
+        await fetch(MAKE_WEBHOOK_URL, {
+          method: 'POST', mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ type: 'message', name: fd.get('name'), message: fd.get('message') })
+        });
+        status.textContent = 'Message sent. Thank you!';
+        e.target.reset();
+      } catch {
+        status.textContent = 'Something went wrong. Please try again.';
       }
-    })();
-  }
+    });
 
-  // Start on first user interaction (required for audio)
-  function start() {
-    loadTrack(0);
-    audio.volume = 0.7;
-    audio.play().catch(() => {});
-    startSlideshow();
+    /* ── RSVP form ── */
+    /*
+      SETUP: Same Make.com scenario, or a second webhook.
+      Map fields: type, name, email, attending, guests, dietary, message → Notion DB
+    */
+    document.getElementById('rsvpForm').addEventListener('submit', async e => {
+      e.preventDefault();
+      const fd = new FormData(e.target);
+      const status = document.getElementById('rsvpStatus');
+      try {
+        await fetch(MAKE_WEBHOOK_URL, {
+          method: 'POST', mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            type: 'rsvp',
+            name:      fd.get('name'),
+            email:     fd.get('email'),
+            attending: fd.get('attending'),
+            guests:    fd.get('guests'),
+            dietary:   fd.get('dietary'),
+            message:   fd.get('message')
+          })
+        });
+        status.textContent = 'RSVP received! We can\'t wait to celebrate with you.';
+        e.target.reset();
+      } catch {
+        status.textContent = 'Something went wrong. Please try again.';
+      }
+    });
 
-    // Try to set up beat detection — if it fails (e.g. CORS on file://), audio still plays fine
-    try {
-      setupAnalyser();
-      if (audioCtx.state === 'suspended') audioCtx.resume();
-    } catch(e) {
-      console.log('Beat detection unavailable:', e);
-    }
-  }
+    /* ── Gallery upload (local preview) ── */
+    document.getElementById('photoInput').addEventListener('change', e => {
+      const grid = document.getElementById('galleryGrid');
+      [...e.target.files].forEach(file => {
+        const img = document.createElement('img');
+        img.src = URL.createObjectURL(file);
+        img.alt = '';
+        grid.appendChild(img);
+      });
+    });
 
-  // Slideshow starts immediately; audio requires first user gesture (browser policy)
-  window.addEventListener('load', () => {
-    startSlideshow();
-  });
+  </script>
 
-  document.addEventListener('click', function once() {
-    document.removeEventListener('click', once);
-    loadTrack(0);
-    audio.volume = 0.7;
-    audio.play().catch(() => {});
-    try {
-      setupAnalyser();
-      if (audioCtx.state === 'suspended') audioCtx.resume();
-    } catch(e) {
-      console.log('Beat detection unavailable:', e);
-    }
-  });
-
-  // Keyboard controls
-  document.addEventListener('keydown', (e) => {
-    if (e.code === 'Space') { e.preventDefault(); togglePlay(); }
-  });
-</script>
 </body>
 </html>
