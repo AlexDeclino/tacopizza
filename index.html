@@ -404,6 +404,7 @@
     #contrib-modal-box p  { font-size: 13px; opacity: 0.6; margin: 0 0 16px; }
 
     #contrib-name-input {
+      font-size: 16px;
       width: 100%;
       box-sizing: border-box;
       border: 1px solid #aaa;
@@ -524,19 +525,41 @@
 
     .radio-group {
       display: flex;
-      gap: 24px;
+      gap: 12px;
       margin-top: 4px;
+      width: 100%;
     }
 
     .radio-group label {
+      flex: 1;
       display: flex;
       align-items: center;
+      justify-content: center;
       gap: 8px;
       font-size: 14px;
+      border: 1px solid #aaa;
+      padding: 10px 8px;
+      cursor: pointer;
+      user-select: none;
+      transition: background 0.15s, border-color 0.15s;
       letter-spacing: 0;
       text-transform: none;
       color: #000;
       cursor: pointer;
+    }
+
+    .radio-group input[type="radio"] {
+      display: none;
+    }
+
+    .radio-group input[type="radio"]:checked + span {
+      font-weight: bold;
+    }
+
+    .radio-group label:has(input:checked) {
+      background: #000;
+      color: #fff;
+      border-color: #000;
     }
 
     .form-msg {
@@ -766,7 +789,7 @@
       <ul class="gift-list">
         <li class="gift-item" data-gift-id="free">
           <span class="gift-name">Free contribution</span>
-          <input id="free-amount" type="number" min="1" placeholder="$ amount" style="width:90px;border:1px solid #aaa;background:none;padding:5px 8px;font-size:15px;font-family:'Times New Roman',Times,serif;outline:none;">
+          <input id="free-amount" type="number" min="1" placeholder="$ amount" style="width:90px;border:1px solid #aaa;background:none;padding:5px 8px;font-size:16px;font-family:'Times New Roman',Times,serif;outline:none;">
           <div class="gift-btns">
             <button class="btn-outline" onclick="openFreeContrib('venmo')">Venmo (USD)</button>
             <button class="btn-outline" onclick="openFreeContrib('paypal')">PayPal (EUR)</button>
@@ -904,10 +927,14 @@
           <input type="email" name="email" required>
         </div>
         <div class="form-row">
+          <label>Phone</label>
+          <input type="tel" name="phone" autocomplete="tel">
+        </div>
+        <div class="form-row">
           <label>Will you attend?</label>
           <div class="radio-group">
-            <label><input type="radio" name="attending" value="Yes" required> Yes, I'll be there</label>
-            <label><input type="radio" name="attending" value="No"> Unable to attend</label>
+            <label><input type="radio" name="attending" value="Yes" required><span>Yes, I'll be there</span></label>
+            <label><input type="radio" name="attending" value="No"><span>Unable to attend</span></label>
           </div>
         </div>
         <div class="form-row">
@@ -1086,6 +1113,7 @@ location.hash = id;
         await addDoc(collection(firestore, 'rsvps'), {
           name:      fd.get('name'),
           email:     fd.get('email'),
+          phone:     fd.get('phone'),
           attending: fd.get('attending'),
           guests:    fd.get('guests'),
           message:   fd.get('message'),
