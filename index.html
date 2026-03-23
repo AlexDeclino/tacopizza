@@ -6,7 +6,7 @@
   <title>🌮🍕</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fleur+De+Leah&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fleur+De+Leah&family=Festive&family=Permanent+Marker&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -79,26 +79,28 @@
       align-items: center;
       justify-content: center;
       padding: clamp(20px, 4vw, 60px);
-      gap: clamp(10px, 2vw, 20px);
+      gap: 2px;
       pointer-events: none;
       z-index: 1;
+      gap: 0;
     }
 
     .home-title {
       font-family: 'Times New Roman', Times, serif;
-      font-size: clamp(13px, 1.6vw, 20px);
+      font-size: clamp(15px, 2vw, 24px);
       text-align: center;
       color: #000;
-      max-width: 560px;
+      max-width: 80%;
       line-height: 1.5;
+      margin-top: 8px;
     }
 
     .home-svg-stack {
       position: relative;
-      flex: 1 1 0;
+      flex: 0 1 auto;
       min-height: 0;
-      max-width: 100%;
-      display: flex;
+      max-width: 80%;
+      display: inline-flex;
       align-items: center;
       justify-content: center;
     }
@@ -106,7 +108,7 @@
     .home-svg {
       display: block;
       max-width: 100%;
-      max-height: 100%;
+      max-height: 45vh;
       width: auto;
       height: auto;
       object-fit: contain;
@@ -167,7 +169,7 @@
       margin-bottom: 48px;
     }
 
-    /* ── Footer (mirrors header) ── */
+    /* ── Footer ── */
     footer {
       position: fixed;
       bottom: 0; left: 0;
@@ -177,14 +179,62 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      gap: clamp(12px, 3vw, 40px);
-      padding: 18px clamp(12px, 3vw, 40px);
+      padding: 10px clamp(12px, 3vw, 40px);
     }
 
-    .save-the-date {
+    .footer-inner {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .footer-names {
       font-size: clamp(13px, 1.4vw, 18px);
       letter-spacing: 0.08em;
       text-transform: uppercase;
+    }
+
+    .save-the-date {
+      font-size: clamp(22px, 2.2vw, 28px);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .home-title span[style] {
+      font-family: 'Permanent Marker', cursive;
+      text-transform: uppercase;
+      font-size: clamp(22px, 3vw, 40px);
+      letter-spacing: 0.05em;
+      line-height: 1.3;
+      display: inline-block;
+      background: none !important;
+      color: #FF0000 !important;
+      padding: 0 !important;
+    }
+
+    .countdown {
+      display: flex;
+      gap: 12px;
+    }
+
+    .countdown div {
+      display: flex;
+      flex-direction: row;
+      align-items: baseline;
+      gap: 2px;
+    }
+
+    .countdown span {
+      font-size: clamp(13px, 1.4vw, 18px);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .countdown label {
+      font-size: clamp(13px, 1.4vw, 18px);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      opacity: 0.6;
     }
 
 
@@ -284,6 +334,133 @@
     }
 
     /* ── Registry ── */
+    .gift-list {
+      list-style: none;
+      width: 100%;
+      margin-top: 24px;
+    }
+
+    .gift-item {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 16px;
+      padding: 12px 0;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .gift-contributors {
+      width: 100%;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 2px;
+      min-height: 0;
+    }
+
+    .gift-contributor-tag {
+      font-size: 12px;
+      background: #e8f5e9;
+      border: 1px solid #a5d6a7;
+      border-radius: 20px;
+      padding: 2px 10px;
+      color: #2a7a2a;
+    }
+
+    .gift-contributed-btn {
+      background: none;
+      border: 1px solid #aaa;
+      border-radius: 4px;
+      padding: 4px 10px;
+      font-size: 13px;
+      cursor: pointer;
+      white-space: nowrap;
+      font-family: 'Times New Roman', Times, serif;
+      color: #555;
+    }
+
+#contrib-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 500;
+      background: rgba(0,0,0,0.45);
+      align-items: center;
+      justify-content: center;
+    }
+
+    #contrib-modal.open { display: flex; }
+
+    #contrib-modal-box {
+      background: #f0f0f0;
+      padding: 32px 28px;
+      max-width: 320px;
+      width: 90%;
+      text-align: center;
+      font-family: 'Times New Roman', Times, serif;
+    }
+
+    #contrib-modal-box h3 { margin: 0 0 6px; font-size: 18px; }
+    #contrib-modal-box p  { font-size: 13px; opacity: 0.6; margin: 0 0 16px; }
+
+    #contrib-name-input {
+      width: 100%;
+      box-sizing: border-box;
+      border: 1px solid #aaa;
+      background: none;
+      padding: 8px 12px;
+      font-size: 15px;
+      font-family: 'Times New Roman', Times, serif;
+      margin-bottom: 12px;
+      outline: none;
+    }
+
+    #contrib-name-input:focus { border-color: #FF0000; }
+
+    #contrib-submit {
+      background: #000;
+      color: #fff;
+      border: none;
+      padding: 10px 0;
+      font-size: 15px;
+      font-family: 'Times New Roman', Times, serif;
+      cursor: pointer;
+      width: 100%;
+      margin-bottom: 8px;
+    }
+
+    #contrib-cancel {
+      background: none;
+      border: none;
+      font-size: 13px;
+      font-family: 'Times New Roman', Times, serif;
+      cursor: pointer;
+      opacity: 0.5;
+      text-decoration: underline;
+    }
+
+    .gift-name {
+      flex: 1;
+      font-size: 16px;
+    }
+
+    .gift-amount {
+      font-size: 16px;
+      font-weight: bold;
+      min-width: 60px;
+      text-align: right;
+    }
+
+.gift-btns {
+      display: flex;
+      gap: 8px;
+    }
+
+    .gift-btns .btn-outline {
+      font-size: 11px;
+      padding: 6px 12px;
+    }
+
     .registry-intro {
       font-size: 17px;
       line-height: 1.7;
@@ -431,10 +608,21 @@
 
       nav {
         gap: 0;
-        padding: 12px clamp(10px, 3vw, 20px);
+        padding: 10px 8px;
+        justify-content: center;
       }
 
-      nav a { font-size: clamp(10px, 3.2vw, 14px); gap: 3px; }
+      nav a {
+        font-size: clamp(9px, 2.6vw, 12px);
+        letter-spacing: 0.02em;
+        gap: 2px;
+      }
+
+      nav a + a::before {
+        margin: 0 clamp(4px, 1.2vw, 8px);
+      }
+
+      nav a .marker { display: none; }
 
       footer {
         gap: 12px;
@@ -505,12 +693,19 @@
         <img src="svg/path1.svg" alt="" class="home-svg">
         <img src="svg/path3.svg" alt="" class="home-svg-heart">
       </div>
-      <p class="home-title">One year ago, a Pizza met a little Taco and filled her up with some melty mozzarella cheese. The little Taco went nuts and became obsessed with the Pizza. Little Taco used some her witchy powers to put a spell on the Pizza, making him hers forever. We are happy to invite you to a new culinary exploration of Taco&amp;Pizza on the 26th of June, 2026 in NYC.</p>
+      <p class="home-title">We are pleased to invite you to join us for a once in a lifetime<br><span style="background:#FF0000;color:#fff;padding:2px 8px;">Mexitalian Extravaganza</span><br>exclusively live from the melting pot(hole) of<br><span style="background:#FF0000;color:#fff;padding:2px 8px;">New York City</span><br>on the gentle post-soltice summer evening of<br><span style="background:#FF0000;color:#fff;padding:2px 8px;">Friday, June 26th, 2026</span></p>
     </div>
   </section>
 
   <footer>
-    <span class="save-the-date" style="background:#FF0000;color:#fff;padding:4px 12px;">26 June 2026, NYC</span>
+    <div class="footer-inner">
+<div class="countdown" id="countdown">
+        <div><span id="cd-days">--</span><label>D</label></div>
+        <div><span id="cd-hours">--</span><label>H</label></div>
+        <div><span id="cd-mins">--</span><label>M</label></div>
+        <div><span id="cd-secs">--</span><label>S</label></div>
+      </div>
+    </div>
   </footer>
 
 
@@ -521,14 +716,14 @@
       <div class="venue-block">
         <p class="event-date">Thursday, 25 June</p>
         <h3>Welcome Drinks</h3>
-        <p class="event-time-loc">8:00 PM · Anable Basin · Long Island City, NY 11101</p>
+        <p class="event-time-loc">6:00 PM · Anable Basin · Long Island City, NY 11101</p>
         <div class="cal-btns">
           <a class="btn-outline" target="_blank"
             href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Welcome+Drinks+%E2%80%93+Alessandro+%26+Jovanna&dates=20260626T000000Z%2F20260626T030000Z&location=4-40+44th+Dr+Long+Island+City+NY+11101&details=Welcome+Drinks.">Add to Google Calendar</a>
           <button class="btn-outline" onclick="downloadEventICS('20260626T000000Z','20260626T030000Z','Welcome Drinks \u2013 Alessandro & Jovanna','4-40 44th Dr, Long Island City, NY 11101','Welcome Drinks.')">Add to Apple Calendar</button>
         </div>
         <iframe class="map-embed" loading="lazy"
-          src="https://maps.google.com/maps?q=4-40+44th+Dr+Long+Island+City+NY+11101&output=embed">
+          src="https://maps.google.com/maps?q=Anable+Basin+Sailing+Bar+and+Grill&output=embed">
         </iframe>
       </div>
 
@@ -548,8 +743,8 @@
 
       <div class="venue-block">
         <p class="event-date">Saturday, 27 June</p>
-        <h3>Chill Time</h3>
-        <p class="event-time-loc">5:00 PM · Concert Groove Pavilion · Prospect Park, Brooklyn, NY</p>
+        <h3>Tornaboda Picnic (BYOB)</h3>
+        <p class="event-time-loc">3:00 PM · Concert Groove Pavilion · Prospect Park, Brooklyn, NY</p>
         <div class="cal-btns">
           <a class="btn-outline" target="_blank"
             href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Chill+Time+%E2%80%93+Alessandro+%26+Jovanna&dates=20260627T210000Z%2F20260628T010000Z&location=Concert+Groove+Pavilion+Prospect+Park+Brooklyn+NY&details=Chill+Time.">Add to Google Calendar</a>
@@ -560,19 +755,126 @@
         </iframe>
       </div>
 
-      <p class="dress-code">Dress Code — Casual</p>
     </div>
   </section>
 
   <!-- ── REGISTRY ── -->
   <section id="page-registry" class="page">
     <div class="content">
-      <p class="registry-intro">In lieu of traditional gifts, we would love your contribution to our honeymoon fund. Your generosity means the world to us.</p>
+      <p class="registry-intro">Your presence to our wedding is what truly matters to us. <br> If you'd like to give a little something extra, we've set up a honeymoon/greencard fund. <br> Contribute what you wish from the list below!</p>
 
-      <div class="payment-btns">
-        <a class="btn btn-red" href="https://venmo.com/Jovanna-Venegas" target="_blank">Venmo</a>
-        <a class="btn btn-red" href="https://paypal.me/solposta" target="_blank">PayPal</a>
-      </div>
+      <ul class="gift-list">
+        <li class="gift-item" data-gift-id="free">
+          <span class="gift-name">Free contribution</span>
+          <input id="free-amount" type="number" min="1" placeholder="$ amount" style="width:90px;border:1px solid #aaa;background:none;padding:5px 8px;font-size:15px;font-family:'Times New Roman',Times,serif;outline:none;">
+          <div class="gift-btns">
+            <button class="btn-outline" onclick="openFreeContrib('venmo')">Venmo (USD)</button>
+            <button class="btn-outline" onclick="openFreeContrib('paypal')">PayPal (EUR)</button>
+            <button class="gift-contributed-btn" onclick="openContribModal(this)">✓ I've contributed</button>
+          </div>
+          <div class="gift-contributors" id="contrib-list-free"></div>
+        </li>
+        <li class="gift-item" data-gift-id="0">
+          <span class="gift-name">Honeymoon flights</span>
+          <span class="gift-amount">$500</span>
+          <div class="gift-btns">
+            <a class="btn-outline" href="https://venmo.com/Jovanna-Venegas?txn=pay&amount=500&note=Honeymoon+Flights" target="_blank">Venmo (USD)</a>
+            <a class="btn-outline" href="https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=gate.gvn908%40gmail.com&currency_code=EUR&amount=500" target="_blank">PayPal (EUR)</a>
+            <button class="gift-contributed-btn" onclick="openContribModal(this)">✓ I've contributed</button>
+          </div>
+          <div class="gift-contributors" id="contrib-list-0"></div>
+        </li>
+        <li class="gift-item" data-gift-id="1">
+          <span class="gift-name">Hotel night</span>
+          <span class="gift-amount">$150</span>
+          <div class="gift-btns">
+            <a class="btn-outline" href="https://venmo.com/Jovanna-Venegas?txn=pay&amount=150&note=Hotel+Night" target="_blank">Venmo (USD)</a>
+            <a class="btn-outline" href="https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=gate.gvn908%40gmail.com&currency_code=EUR&amount=150" target="_blank">PayPal (EUR)</a>
+            <button class="gift-contributed-btn" onclick="openContribModal(this)">✓ I've contributed</button>
+          </div>
+          <div class="gift-contributors" id="contrib-list-1"></div>
+        </li>
+        <li class="gift-item" data-gift-id="2">
+          <span class="gift-name">Romantic dinner</span>
+          <span class="gift-amount">$100</span>
+          <div class="gift-btns">
+            <a class="btn-outline" href="https://venmo.com/Jovanna-Venegas?txn=pay&amount=100&note=Romantic+Dinner" target="_blank">Venmo (USD)</a>
+            <a class="btn-outline" href="https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=gate.gvn908%40gmail.com&currency_code=EUR&amount=100" target="_blank">PayPal (EUR)</a>
+            <button class="gift-contributed-btn" onclick="openContribModal(this)">✓ I've contributed</button>
+          </div>
+          <div class="gift-contributors" id="contrib-list-2"></div>
+        </li>
+        <li class="gift-item" data-gift-id="3">
+          <span class="gift-name">Broadway show</span>
+          <span class="gift-amount">$200</span>
+          <div class="gift-btns">
+            <a class="btn-outline" href="https://venmo.com/Jovanna-Venegas?txn=pay&amount=200&note=Broadway+Show" target="_blank">Venmo (USD)</a>
+            <a class="btn-outline" href="https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=gate.gvn908%40gmail.com&currency_code=EUR&amount=200" target="_blank">PayPal (EUR)</a>
+            <button class="gift-contributed-btn" onclick="openContribModal(this)">✓ I've contributed</button>
+          </div>
+          <div class="gift-contributors" id="contrib-list-3"></div>
+        </li>
+        <li class="gift-item" data-gift-id="4">
+          <span class="gift-name">Spa day</span>
+          <span class="gift-amount">$120</span>
+          <div class="gift-btns">
+            <a class="btn-outline" href="https://venmo.com/Jovanna-Venegas?txn=pay&amount=120&note=Spa+Day" target="_blank">Venmo (USD)</a>
+            <a class="btn-outline" href="https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=gate.gvn908%40gmail.com&currency_code=EUR&amount=120" target="_blank">PayPal (EUR)</a>
+            <button class="gift-contributed-btn" onclick="openContribModal(this)">✓ I've contributed</button>
+          </div>
+          <div class="gift-contributors" id="contrib-list-4"></div>
+        </li>
+        <li class="gift-item" data-gift-id="5">
+          <span class="gift-name">Wine tasting</span>
+          <span class="gift-amount">$80</span>
+          <div class="gift-btns">
+            <a class="btn-outline" href="https://venmo.com/Jovanna-Venegas?txn=pay&amount=80&note=Wine+Tasting" target="_blank">Venmo (USD)</a>
+            <a class="btn-outline" href="https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=gate.gvn908%40gmail.com&currency_code=EUR&amount=80" target="_blank">PayPal (EUR)</a>
+            <button class="gift-contributed-btn" onclick="openContribModal(this)">✓ I've contributed</button>
+          </div>
+          <div class="gift-contributors" id="contrib-list-5"></div>
+        </li>
+        <li class="gift-item" data-gift-id="6">
+          <span class="gift-name">City tour</span>
+          <span class="gift-amount">$60</span>
+          <div class="gift-btns">
+            <a class="btn-outline" href="https://venmo.com/Jovanna-Venegas?txn=pay&amount=60&note=City+Tour" target="_blank">Venmo (USD)</a>
+            <a class="btn-outline" href="https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=gate.gvn908%40gmail.com&currency_code=EUR&amount=60" target="_blank">PayPal (EUR)</a>
+            <button class="gift-contributed-btn" onclick="openContribModal(this)">✓ I've contributed</button>
+          </div>
+          <div class="gift-contributors" id="contrib-list-6"></div>
+        </li>
+        <li class="gift-item" data-gift-id="7">
+          <span class="gift-name">Weekend getaway</span>
+          <span class="gift-amount">$300</span>
+          <div class="gift-btns">
+            <a class="btn-outline" href="https://venmo.com/Jovanna-Venegas?txn=pay&amount=300&note=Weekend+Getaway" target="_blank">Venmo (USD)</a>
+            <a class="btn-outline" href="https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=gate.gvn908%40gmail.com&currency_code=EUR&amount=300" target="_blank">PayPal (EUR)</a>
+            <button class="gift-contributed-btn" onclick="openContribModal(this)">✓ I've contributed</button>
+          </div>
+          <div class="gift-contributors" id="contrib-list-7"></div>
+        </li>
+        <li class="gift-item" data-gift-id="8">
+          <span class="gift-name">Museum tickets</span>
+          <span class="gift-amount">$50</span>
+          <div class="gift-btns">
+            <a class="btn-outline" href="https://venmo.com/Jovanna-Venegas?txn=pay&amount=50&note=Museum+Tickets" target="_blank">Venmo (USD)</a>
+            <a class="btn-outline" href="https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=gate.gvn908%40gmail.com&currency_code=EUR&amount=50" target="_blank">PayPal (EUR)</a>
+            <button class="gift-contributed-btn" onclick="openContribModal(this)">✓ I've contributed</button>
+          </div>
+          <div class="gift-contributors" id="contrib-list-8"></div>
+        </li>
+        <li class="gift-item" data-gift-id="9">
+          <span class="gift-name">Honeymoon fund</span>
+          <span class="gift-amount">$25</span>
+          <div class="gift-btns">
+            <a class="btn-outline" href="https://venmo.com/Jovanna-Venegas?txn=pay&amount=25&note=Honeymoon+Fund" target="_blank">Venmo (USD)</a>
+            <a class="btn-outline" href="https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=gate.gvn908%40gmail.com&currency_code=EUR&amount=25" target="_blank">PayPal (EUR)</a>
+            <button class="gift-contributed-btn" onclick="openContribModal(this)">✓ I've contributed</button>
+          </div>
+          <div class="gift-contributors" id="contrib-list-9"></div>
+        </li>
+      </ul>
 
     </div>
   </section>
@@ -617,11 +919,7 @@
             <option value="4">4</option>
           </select>
         </div>
-        <div class="form-row">
-          <label>Dietary Restrictions</label>
-          <input type="text" name="dietary" placeholder="e.g. vegetarian, gluten-free">
-        </div>
-        <div class="form-row">
+<div class="form-row">
           <label>Message to the Couple</label>
           <textarea name="message"></textarea>
         </div>
@@ -654,9 +952,9 @@ location.hash = id;
     activatePage(initialPage);
 
 
-    /* ── Countdown removed ── */
+/* ── Countdown ── */
     function updateCountdown() {
-      const diff = new Date('2026-06-26T16:00:00') - Date.now();
+      const diff = new Date('2026-06-26T20:00:00-04:00') - Date.now();
       if (diff <= 0) return;
       const d = Math.floor(diff / 86400000);
       const h = Math.floor((diff % 86400000) / 3600000);
@@ -723,35 +1021,6 @@ location.hash = id;
       }
     });
 
-    /* ── RSVP form ── */
-    /*
-      SETUP: Same Make.com scenario, or a second webhook.
-      Map fields: type, name, email, attending, guests, dietary, message → Notion DB
-    */
-    document.getElementById('rsvpForm').addEventListener('submit', async e => {
-      e.preventDefault();
-      const fd = new FormData(e.target);
-      const status = document.getElementById('rsvpStatus');
-      try {
-        await fetch(MAKE_WEBHOOK_URL, {
-          method: 'POST', mode: 'no-cors',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            type: 'rsvp',
-            name:      fd.get('name'),
-            email:     fd.get('email'),
-            attending: fd.get('attending'),
-            guests:    fd.get('guests'),
-            dietary:   fd.get('dietary'),
-            message:   fd.get('message')
-          })
-        });
-        status.textContent = 'RSVP received! We can\'t wait to celebrate with you.';
-        e.target.reset();
-      } catch {
-        status.textContent = 'Something went wrong. Please try again.';
-      }
-    });
 
 
 
@@ -786,6 +1055,126 @@ location.hash = id;
 
 
   </script>
+
+  <!-- ── Firebase (modular, no eval) ── -->
+  <script type="module">
+    import { initializeApp }                          from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getDatabase, ref, push, onValue }        from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+    import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey:            "AIzaSyDy8D0Pqc-4VUEka_yFlJNh4J0wvNFl1fA",
+      authDomain:        "weddingcontributionlist.firebaseapp.com",
+      databaseURL:       "https://weddingcontributionlist-default-rtdb.firebaseio.com",
+      projectId:         "weddingcontributionlist",
+      storageBucket:     "weddingcontributionlist.firebasestorage.app",
+      messagingSenderId: "7054180037",
+      appId:             "1:7054180037:web:beee3836ee8c772bda7aac"
+    };
+
+    const app       = initializeApp(firebaseConfig);
+    const db        = getDatabase(app);
+    const firestore = getFirestore(app);
+
+    /* ── RSVP form → Firestore ── */
+    document.getElementById('rsvpForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const fd = new FormData(e.target);
+      const status = document.getElementById('rsvpStatus');
+      status.textContent = 'Sending…';
+      try {
+        await addDoc(collection(firestore, 'rsvps'), {
+          name:      fd.get('name'),
+          email:     fd.get('email'),
+          attending: fd.get('attending'),
+          guests:    fd.get('guests'),
+          message:   fd.get('message'),
+          submittedAt: serverTimestamp()
+        });
+        status.textContent = "RSVP received! We can't wait to celebrate with you.";
+        e.target.reset();
+      } catch (err) {
+        console.error('RSVP error:', err);
+        status.textContent = 'Something went wrong. Please try again.';
+      }
+    });
+
+    /* ── Registry contributions → Realtime DB ── */
+    window._dbPush = function(path, data) { push(ref(db, path), data); };
+
+    onValue(ref(db, 'contributions'), function(snapshot) {
+      const data = snapshot.val() || {};
+      const ids = ['free','0','1','2','3','4','5','6','7','8','9'];
+      ids.forEach(function(giftId) {
+        const container = document.getElementById('contrib-list-' + giftId);
+        if (!container) return;
+        const entries = data[giftId] ? Object.values(data[giftId]) : [];
+        container.innerHTML = '';
+        entries.forEach(function(entry) {
+          const tag = document.createElement('span');
+          tag.className = 'gift-contributor-tag';
+          tag.textContent = '✓ ' + entry.name;
+          container.appendChild(tag);
+        });
+      });
+    });
+  </script>
+
+  <!-- ── Contribution modal ── -->
+  <div id="contrib-modal">
+    <div id="contrib-modal-box">
+      <h3>Thank you! 🤍</h3>
+      <p>Enter your name so Alessandro & Jovanna know who contributed</p>
+      <input id="contrib-name-input" type="text" placeholder="Your name" maxlength="40" autocomplete="name">
+      <button id="contrib-submit">Confirm contribution</button>
+      <br>
+      <button id="contrib-cancel">Cancel</button>
+    </div>
+  </div>
+
+  <script>
+    function openFreeContrib(provider) {
+      const amount = parseFloat(document.getElementById('free-amount').value);
+      if (!amount || amount <= 0) { document.getElementById('free-amount').focus(); return; }
+      const url = provider === 'venmo'
+        ? 'https://venmo.com/Jovanna-Venegas?txn=pay&amount=' + amount + '&note=Free+Contribution'
+        : 'https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=gate.gvn908%40gmail.com&currency_code=EUR&amount=' + amount;
+      window.open(url, '_blank');
+    }
+
+    let _contribBtn = null;
+
+    function openContribModal(btn) {
+      _contribBtn = btn;
+      document.getElementById('contrib-name-input').value = localStorage.getItem('contrib-name') || '';
+      document.getElementById('contrib-modal').classList.add('open');
+      document.getElementById('contrib-name-input').focus();
+    }
+
+    document.getElementById('contrib-cancel').addEventListener('click', function() {
+      document.getElementById('contrib-modal').classList.remove('open');
+      _contribBtn = null;
+    });
+
+    document.getElementById('contrib-modal').addEventListener('click', function(e) {
+      if (e.target === this) { this.classList.remove('open'); _contribBtn = null; }
+    });
+
+    document.getElementById('contrib-name-input').addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') document.getElementById('contrib-submit').click();
+    });
+
+    document.getElementById('contrib-submit').addEventListener('click', function() {
+      const name = document.getElementById('contrib-name-input').value.trim();
+      if (!name) { document.getElementById('contrib-name-input').focus(); return; }
+      const giftId = _contribBtn.closest('.gift-item').dataset.giftId;
+      localStorage.setItem('contrib-name', name);
+      if (window._dbPush) window._dbPush('contributions/' + giftId, { name: name, ts: Date.now() });
+      document.getElementById('contrib-modal').classList.remove('open');
+      _contribBtn = null;
+    });
+  </script>
+
 
 </body>
 </html>
