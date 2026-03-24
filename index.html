@@ -899,10 +899,11 @@
 
   <!-- ── GALLERY ── -->
   <section id="page-gallery" class="page">
-    <div id="gallery-slideshow" style="display:block;max-width:80%;max-height:60vh;width:80%;height:60vh;margin:80px auto 0;position:relative;z-index:0;overflow:hidden;background:#000;">
-      <img id="gs-0" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:fill;mix-blend-mode:difference;opacity:1;transition:opacity 5s ease-in-out;">
-      <img id="gs-1" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:fill;mix-blend-mode:difference;opacity:0;transition:opacity 5s ease-in-out;">
-      <img id="gs-2" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:fill;mix-blend-mode:difference;opacity:0;transition:opacity 5s ease-in-out;">
+    <div id="gallery-slideshow" style="position:absolute;inset:0;z-index:0;overflow:hidden;background:#808080;">
+      <img id="gs-0" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:fill;mix-blend-mode:overlay;opacity:0;">
+      <img id="gs-1" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:fill;mix-blend-mode:overlay;opacity:0;">
+      <img id="gs-2" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:fill;mix-blend-mode:overlay;opacity:0;">
+      <img id="gs-3" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:fill;mix-blend-mode:overlay;opacity:0;">
     </div>
     <div class="content">
       <button class="btn-outline" onclick="window.open('https://www.dropbox.com/request/MbbyqCY5p8DDntPPX5z4','_blank')">Upload Photos</button>
@@ -1047,37 +1048,52 @@
     const slots = [
       document.getElementById('gs-0'),
       document.getElementById('gs-1'),
-      document.getElementById('gs-2')
+      document.getElementById('gs-2'),
+      document.getElementById('gs-3')
     ];
 
-    // Preload first 3 images
+    // Quarter-cycle 4-slot crossfade:
+    // Each image fades in over FADE ms, then out over FADE ms.
+    // A new image starts fading in every STEP = FADE/2 ms.
+    // At the moment the center image (B) peaks at 100%:
+    //   - the previous image (A) is exactly halfway through its fade-out → 50%
+    //   - the next image (C) is exactly halfway through its fade-in → 50%
+    const FADE = 5000;
+    const STEP = 5000;
+
+    // Apply transition once to all slots
+    slots.forEach(function(s) { s.style.transition = 'opacity ' + FADE + 'ms linear'; });
+
     let imgIdx = 0;
-    slots.forEach(function(s, i) { s.src = encodeURI(images[i]); imgIdx = i + 1; });
+    let step = 0;
 
-    // State: which slot is "active" (B = 100%)
-    // Cycle: every HOLD ms, advance active slot
-    // Transition = 5s, hold = 5s
-    // So B ramps to 100% over 5s while A ramps down
-    // When B hits 100%, C starts ramping up = next interval tick
-    const TRANSITION = 5000; // matches CSS transition duration
-    const HOLD = 5000;       // how long each image stays at peak before next starts
-
-    let active = 0; // slot index currently at opacity 1
-
-    setInterval(function() {
-      const prev = active;
-      active = (active + 1) % 3;
-      const next = (active + 1) % 3;
-
-      // Load next image into the slot that's about to fade in after next cycle
-      slots[next].src = encodeURI(images[imgIdx % images.length]);
+    function gsTick() {
+      var slotIdx = step % 4;
+      var slot = slots[slotIdx];
+      var stepCapture = step;
+      slot.src = encodeURI(images[imgIdx % images.length]);
       imgIdx++;
+      // Double-rAF ensures the browser commits current styles before animating
+      requestAnimationFrame(function() {
+        requestAnimationFrame(function() {
+          slot.style.opacity = '1';
+          // The slot from 2 steps ago just peaked — start fading it out
+          if (stepCapture >= 2) {
+            slots[(stepCapture - 2) % 4].style.opacity = '0';
+          }
+        });
+      });
+      step++;
+    }
 
-      // Fade: prev → 0, active → 1, next stays 0
-      slots[prev].style.opacity = '0';
-      slots[active].style.opacity = '1';
-      slots[next].style.opacity = '0';
-    }, HOLD);
+    gsTick();
+    setTimeout(function() {
+      gsTick();
+      setTimeout(function() {
+        gsTick();
+        setInterval(gsTick, STEP);
+      }, STEP);
+    }, STEP);
   })();
 
   /* ── Heart beat + flip (JS-driven, no CSS animation conflict) ── */
@@ -1190,11 +1206,18 @@
   </div>
 
   <script>
-    // Force payment links through window.open to bypass iOS universal link hijacking
+    // Force payment links via programmatic anchor click — works on Safari + Chrome iOS
+    function openExternal(url) {
+      var a = document.createElement('a');
+      a.href = url; a.target = '_blank'; a.rel = 'noopener';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
     document.querySelectorAll('.gift-btns a.btn-outline').forEach(function(a) {
       a.addEventListener('click', function(e) {
         e.preventDefault();
-        window.open(a.href, '_blank');
+        openExternal(a.href);
       });
     });
 
@@ -1204,7 +1227,7 @@
       const url = provider === 'venmo'
         ? 'https://venmo.com/Jovanna-Venegas?txn=pay&amount=' + amount + '&note=Free+Contribution'
         : 'https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=gate.gvn908%40gmail.com&currency_code=EUR&amount=' + amount;
-      window.open(url, '_blank');
+      openExternal(url);
     }
 
     let _contribBtn = null;
