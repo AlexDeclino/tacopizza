@@ -604,53 +604,14 @@
     }
 
     /* ── Gallery ── */
-    #gallery-slideshow {
+    #page-gallery .content {
       position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-    }
-
-    #gallery-slideshow .slide {
-      position: absolute;
-      inset: 0;
-      opacity: 0;
-      transition: opacity 2s ease-in-out;
-    }
-
-    #gallery-slideshow .slide.visible { opacity: 1; }
-
-    #gallery-slideshow .slide img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      filter: contrast(1.1) saturate(1.2) brightness(0.85);
-    }
-
-    #gallery-vignette {
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      background: radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.5) 100%);
-      z-index: 1;
-    }
-
-    #gallery-upload-btn {
-      position: absolute;
-      bottom: 80px;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 2;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 10px 24px;
       text-align: center;
-    }
-
-    #gallery-upload-btn .btn-outline {
-      background: rgba(240,240,240,0.85);
-      backdrop-filter: blur(4px);
-      font-size: 15px;
-      padding: 12px 28px;
-      cursor: pointer;
+      background: #f0f0f0;
     }
 
     .gallery-grid img {
@@ -938,10 +899,13 @@
 
   <!-- ── GALLERY ── -->
   <section id="page-gallery" class="page">
-    <div id="gallery-slideshow"></div>
-    <div id="gallery-vignette"></div>
-    <div id="gallery-upload-btn" onclick="window.open('https://www.dropbox.com/request/MbbyqCY5p8DDntPPX5z4','_blank')">
-      <button class="btn-outline">📷 Share your photos</button>
+    <div id="gallery-slideshow" style="display:block;max-width:80%;max-height:60vh;width:80%;height:60vh;margin:80px auto 0;position:relative;z-index:0;overflow:hidden;background:#000;">
+      <img id="gs-0" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:fill;mix-blend-mode:difference;opacity:1;transition:opacity 5s ease-in-out;">
+      <img id="gs-1" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:fill;mix-blend-mode:difference;opacity:0;transition:opacity 5s ease-in-out;">
+      <img id="gs-2" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:fill;mix-blend-mode:difference;opacity:0;transition:opacity 5s ease-in-out;">
+    </div>
+    <div class="content">
+      <button class="btn-outline" onclick="window.open('https://www.dropbox.com/request/MbbyqCY5p8DDntPPX5z4','_blank')">Upload Photos</button>
     </div>
   </section>
 
@@ -1000,7 +964,6 @@
       });
       document.querySelector('footer').style.display = id === 'home' ? '' : 'none';
       spawnRandomHearts(id);
-      if (id === 'gallery') initGallerySlideshow();
       location.hash = id;
     }
 
@@ -1048,100 +1011,74 @@
       a.click();
     }
 
-    /* ── E-Card live preview ── */
-    document.getElementById('ecardName').addEventListener('input', e => {
-      document.getElementById('ecardFrom').textContent = e.target.value ? '— ' + e.target.value : '';
-    });
-    document.getElementById('ecardText').addEventListener('input', e => {
-      document.getElementById('ecardMsg').textContent = e.target.value || 'Your message will appear here.';
-    });
-
-    /* ── Registry message form ── */
-    /*
-      SETUP: Create a Make.com webhook scenario that writes to Notion.
-      1. Go to make.com → Create scenario → Webhooks → Custom Webhook → Copy URL
-      2. Add Notion action → Create Database Item → map fields: name, message, type
-      3. Paste your webhook URL below as MAKE_WEBHOOK_URL
-    */
-    const MAKE_WEBHOOK_URL = 'YOUR_MAKE_WEBHOOK_URL_HERE';
-
-    document.getElementById('messageForm').addEventListener('submit', async e => {
-      e.preventDefault();
-      const fd = new FormData(e.target);
-      const status = document.getElementById('msgStatus');
-      try {
-        await fetch(MAKE_WEBHOOK_URL, {
-          method: 'POST', mode: 'no-cors',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ type: 'message', name: fd.get('name'), message: fd.get('message') })
-        });
-        status.textContent = 'Message sent. Thank you!';
-        e.target.reset();
-      } catch {
-        status.textContent = 'Something went wrong. Please try again.';
-      }
-    });
 
 
 
 
-/* ── Gallery slideshow ── */
-  let _galleryInited = false;
-  function initGallerySlideshow() {
-    if (_galleryInited) return;
-    _galleryInited = true;
 
+  /* ── Gallery slideshow ── */
+  (function() {
     const images = [
-      "images/2026-02-14 12.59.40.jpg","images/2026-02-14 12.59.52.jpg",
-      "images/2026-02-14 12.59.56.jpg","images/2026-02-14 12.59.58.jpg",
-      "images/2026-02-14 12.59.59.jpg","images/2026-02-14 13.00.01.jpg",
-      "images/2026-02-14 13.00.02.jpg","images/2026-02-14 13.00.04.jpg",
-      "images/2026-02-14 13.00.05.jpg","images/2026-02-14 13.00.07.jpg",
-      "images/2026-02-14 13.00.09.jpg","images/2026-02-14 13.00.11.jpg",
-      "images/2026-02-14 13.00.12.jpg","images/2026-02-14 13.00.16.jpg",
-      "images/2026-02-14 13.00.17.jpg","images/IMG_4670.jpg",
-      "images/IMG_4755.jpg","images/IMG_4803.jpg","images/IMG_4834.jpg",
-      "images/IMG_4838.jpg","images/IMG_4944.jpg","images/IMG_4973.jpg",
-      "images/IMG_5014.jpg","images/IMG_5059.jpg","images/IMG_5128.jpg",
-      "images/IMG_5246.jpg","images/IMG_5249.jpg","images/IMG_5285.jpg",
-      "images/IMG_5428.jpg","images/IMG_5544.jpg","images/IMG_5546.jpg",
-      "images/IMG_5663.jpg","images/IMG_5688.jpg","images/IMG_5690.jpg",
-      "images/IMG_5737.jpg","images/IMG_5738.jpg","images/IMG_5948.jpg",
-      "images/IMG_5949.jpg","images/IMG_5759.jpg","images/IMG_5776.jpg",
-      "images/IMG_5778.jpg","images/IMG_6063.jpg","images/IMG_6278.jpg",
-      "images/IMG_6197.PNG","images/16fde4e2-95a9-4d96-babf-cfa27be35e18.JPG",
+      "images/16fde4e2-95a9-4d96-babf-cfa27be35e18.JPG","images/2026-02-14 12.59.40.jpg",
+      "images/2026-02-14 12.59.52.jpg","images/2026-02-14 12.59.56.jpg",
+      "images/2026-02-14 12.59.58.jpg","images/2026-02-14 12.59.59.jpg",
+      "images/2026-02-14 13.00.01.jpg","images/2026-02-14 13.00.02.jpg",
+      "images/2026-02-14 13.00.04.jpg","images/2026-02-14 13.00.05.jpg",
+      "images/2026-02-14 13.00.07.jpg","images/2026-02-14 13.00.09.jpg",
+      "images/2026-02-14 13.00.11.jpg","images/2026-02-14 13.00.12.jpg",
+      "images/2026-02-14 13.00.16.jpg","images/2026-02-14 13.00.17.jpg",
+      "images/IMG_4670.jpg","images/IMG_4755.jpg","images/IMG_4803.jpg",
+      "images/IMG_4834.jpg","images/IMG_4838.jpg","images/IMG_4944.jpg",
+      "images/IMG_4973.jpg","images/IMG_5014.jpg","images/IMG_5059.jpg",
+      "images/IMG_5128.jpg","images/IMG_5246.jpg","images/IMG_5249.jpg",
+      "images/IMG_5285.jpg","images/IMG_5428.jpg","images/IMG_5544.jpg",
+      "images/IMG_5546.jpg","images/IMG_5663.jpg","images/IMG_5688.jpg",
+      "images/IMG_5690.jpg","images/IMG_5737.jpg","images/IMG_5738.jpg",
+      "images/IMG_5759.jpg","images/IMG_5776.jpg","images/IMG_5778.jpg",
+      "images/IMG_5948.jpg","images/IMG_5949.jpg","images/IMG_6063.jpg",
+      "images/IMG_6197.PNG","images/IMG_6278.jpg",
       "images/f3e9b0e9-1b33-4b90-8aaf-fa941e65b0fb.JPG"
     ];
-
-    // Shuffle
     for (let i = images.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [images[i], images[j]] = [images[j], images[i]];
     }
 
-    const container = document.getElementById('gallery-slideshow');
-    images.forEach(function(src, i) {
-      const div = document.createElement('div');
-      div.className = 'slide' + (i === 0 ? ' visible' : '');
-      const img = document.createElement('img');
-      img.src = src;
-      img.alt = '';
-      img.loading = i < 3 ? 'eager' : 'lazy';
-      div.appendChild(img);
-      container.appendChild(div);
-    });
+    const slots = [
+      document.getElementById('gs-0'),
+      document.getElementById('gs-1'),
+      document.getElementById('gs-2')
+    ];
 
-    const slides = container.querySelectorAll('.slide');
-    let current = 0;
-    let history = [0];
+    // Preload first 3 images
+    let imgIdx = 0;
+    slots.forEach(function(s, i) { s.src = encodeURI(images[i]); imgIdx = i + 1; });
+
+    // State: which slot is "active" (B = 100%)
+    // Cycle: every HOLD ms, advance active slot
+    // Transition = 5s, hold = 5s
+    // So B ramps to 100% over 5s while A ramps down
+    // When B hits 100%, C starts ramping up = next interval tick
+    const TRANSITION = 5000; // matches CSS transition duration
+    const HOLD = 5000;       // how long each image stays at peak before next starts
+
+    let active = 0; // slot index currently at opacity 1
 
     setInterval(function() {
-      current = (current + 1) % images.length;
-      slides[current].classList.add('visible');
-      history.push(current);
-      if (history.length > 2) slides[history.shift()].classList.remove('visible');
-    }, 5000);
-  }
+      const prev = active;
+      active = (active + 1) % 3;
+      const next = (active + 1) % 3;
+
+      // Load next image into the slot that's about to fade in after next cycle
+      slots[next].src = encodeURI(images[imgIdx % images.length]);
+      imgIdx++;
+
+      // Fade: prev → 0, active → 1, next stays 0
+      slots[prev].style.opacity = '0';
+      slots[active].style.opacity = '1';
+      slots[next].style.opacity = '0';
+    }, HOLD);
+  })();
 
   /* ── Heart beat + flip (JS-driven, no CSS animation conflict) ── */
   function initFloatingHeart(el) {
