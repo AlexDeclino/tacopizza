@@ -1161,6 +1161,14 @@ location.hash = id;
   </div>
 
   <script>
+    // Force payment links through window.open to bypass iOS universal link hijacking
+    document.querySelectorAll('.gift-btns a.btn-outline').forEach(function(a) {
+      a.addEventListener('click', function(e) {
+        e.preventDefault();
+        window.open(a.href, '_blank');
+      });
+    });
+
     function openFreeContrib(provider) {
       const amount = parseFloat(document.getElementById('free-amount').value);
       if (!amount || amount <= 0) { document.getElementById('free-amount').focus(); return; }
