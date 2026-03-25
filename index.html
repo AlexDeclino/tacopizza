@@ -97,7 +97,7 @@
 
     .home-svg-stack {
       position: relative;
-      flex: 0 1 auto;
+      flex: 1 1 auto;
       min-height: 0;
       max-width: 80%;
       display: inline-flex;
@@ -108,7 +108,7 @@
     .home-svg {
       display: block;
       max-width: 100%;
-      max-height: 45vh;
+      max-height: 100%;
       width: auto;
       height: auto;
       object-fit: contain;
@@ -609,6 +609,8 @@
       bottom: 0;
       left: 0;
       right: 0;
+      max-width: none;
+      margin: 0;
       padding: 10px 24px;
       text-align: center;
       background: #f0f0f0;
@@ -653,9 +655,11 @@
 
       .home-center { top: 50px; bottom: 50px; padding: 4vw; }
 
-      .home-svg { max-height: calc(100vh - 100px - 8vw); }
 
       .cal-btns { flex-direction: column; }
+
+      .gift-name { flex: none; width: 100%; }
+      .gift-amount { text-align: left; }
 
       .btn-group { flex-direction: column; align-items: flex-start; }
     }
@@ -1215,10 +1219,12 @@
       document.body.removeChild(a);
     }
     document.querySelectorAll('.gift-btns a.btn-outline').forEach(function(a) {
-      a.addEventListener('click', function(e) {
-        e.preventDefault();
-        openExternal(a.href);
-      });
+      var btn = document.createElement('button');
+      btn.className = a.className;
+      btn.textContent = a.textContent;
+      var url = a.href;
+      btn.onclick = function() { openExternal(url); };
+      a.parentNode.replaceChild(btn, a);
     });
 
     function openFreeContrib(provider) {
