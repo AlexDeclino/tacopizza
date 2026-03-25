@@ -6,7 +6,7 @@
   <title>🌮🍕</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fleur+De+Leah&family=Festive&family=Permanent+Marker&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -15,6 +15,7 @@
       font-family: 'Times New Roman', Times, serif;
       color: #000;
     }
+
 
     /* ── Header ── */
     header {
@@ -30,13 +31,15 @@
       justify-content: space-between;
       flex-wrap: nowrap;
       gap: 0;
-      padding: 18px clamp(16px, 4vw, 60px);
+      padding: 18px 16px;
+      max-width: 480px;
+      margin: 0 auto;
     }
 
     nav a + a::before {
       content: '|';
       color: #000;
-      margin: 0 clamp(10px, 2vw, 32px);
+      margin: 0 10px;
       font-weight: 300;
       opacity: 0.3;
     }
@@ -44,7 +47,7 @@
     nav a {
       text-decoration: none;
       color: #000;
-      font-size: clamp(13px, 1.4vw, 18px);
+      font-size: 13px;
       letter-spacing: 0.08em;
       text-transform: uppercase;
       cursor: pointer;
@@ -79,7 +82,6 @@
       align-items: center;
       justify-content: center;
       padding: clamp(20px, 4vw, 60px);
-      gap: 2px;
       pointer-events: none;
       z-index: 1;
       gap: 0;
@@ -405,13 +407,12 @@
     #contrib-modal-box p  { font-size: 13px; opacity: 0.6; margin: 0 0 16px; }
 
     #contrib-name-input {
-      font-size: 16px;
       width: 100%;
       box-sizing: border-box;
       border: 1px solid #aaa;
       background: none;
       padding: 8px 12px;
-      font-size: 15px;
+      font-size: 16px;
       font-family: 'Times New Roman', Times, serif;
       margin-bottom: 12px;
       outline: none;
@@ -742,8 +743,8 @@
         <p class="event-time-loc">6:00 PM · Anable Basin · Long Island City, NY 11101</p>
         <div class="cal-btns">
           <a class="btn-outline" target="_blank"
-            href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Welcome+Drinks+%E2%80%93+Alessandro+%26+Jovanna&dates=20260626T000000Z%2F20260626T030000Z&location=4-40+44th+Dr+Long+Island+City+NY+11101&details=Welcome+Drinks.">Add to Google Calendar</a>
-          <button class="btn-outline" onclick="downloadEventICS('20260626T000000Z','20260626T030000Z','Welcome Drinks \u2013 Alessandro & Jovanna','4-40 44th Dr, Long Island City, NY 11101','Welcome Drinks.')">Add to Apple Calendar</button>
+            href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Welcome+Drinks+%E2%80%93+Alessandro+%26+Jovanna&dates=20260625T180000%2F20260625T220000&location=4-40+44th+Dr+Long+Island+City+NY+11101&details=Welcome+Drinks.">Add to Google Calendar</a>
+          <button class="btn-outline" onclick="downloadEventICS('20260625T180000','20260625T220000','Welcome Drinks \u2013 Alessandro & Jovanna','4-40 44th Dr, Long Island City, NY 11101','Welcome Drinks.')">Add to Apple Calendar</button>
         </div>
         <iframe class="map-embed" loading="lazy"
           src="https://maps.google.com/maps?q=Anable+Basin+Sailing+Bar+and+Grill&output=embed">
@@ -756,8 +757,8 @@
         <p class="event-time-loc">8:00 PM · Decatur Audio Laboratories · Brooklyn, NY</p>
         <div class="cal-btns">
           <a class="btn-outline" target="_blank"
-            href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Friends+Ceremony+%2B+Cake!+%2B+Party+%E2%80%93+Alessandro+%26+Jovanna&dates=20260627T000000Z%2F20260627T040000Z&location=Decatur+Audio+Laboratories+Brooklyn+NY&details=Friends+Ceremony+%2B+Cake!+%2B+Party.">Add to Google Calendar</a>
-          <button class="btn-outline" onclick="downloadEventICS('20260627T000000Z','20260627T040000Z','Friends Ceremony + Cake! + Party \u2013 Alessandro & Jovanna','Decatur Audio Laboratories, Brooklyn, NY','Friends Ceremony + Cake! + Party.')">Add to Apple Calendar</button>
+            href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Friends+Ceremony+%2B+Cake!+%2B+Party+%E2%80%93+Alessandro+%26+Jovanna&dates=20260626T200000%2F20260627T000000&location=Decatur+Audio+Laboratories+Brooklyn+NY&details=Friends+Ceremony+%2B+Cake!+%2B+Party.">Add to Google Calendar</a>
+          <button class="btn-outline" onclick="downloadEventICS('20260626T200000','20260627T000000','Friends Ceremony + Cake! + Party \u2013 Alessandro & Jovanna','Decatur Audio Laboratories, Brooklyn, NY','Friends Ceremony + Cake! + Party.')">Add to Apple Calendar</button>
         </div>
         <iframe class="map-embed" loading="lazy"
           src="https://maps.google.com/maps?q=Decatur+Audio+Laboratories+Brooklyn+NY&output=embed">
@@ -770,8 +771,8 @@
         <p class="event-time-loc">3:00 PM · Concert Groove Pavilion · Prospect Park, Brooklyn, NY</p>
         <div class="cal-btns">
           <a class="btn-outline" target="_blank"
-            href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Chill+Time+%E2%80%93+Alessandro+%26+Jovanna&dates=20260627T210000Z%2F20260628T010000Z&location=Concert+Groove+Pavilion+Prospect+Park+Brooklyn+NY&details=Chill+Time.">Add to Google Calendar</a>
-          <button class="btn-outline" onclick="downloadEventICS('20260627T210000Z','20260628T010000Z','Chill Time \u2013 Alessandro & Jovanna','Concert Groove Pavilion, Prospect Park, Brooklyn, NY','Chill Time.')">Add to Apple Calendar</button>
+            href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Tornaboda+Picnic+%E2%80%93+Alessandro+%26+Jovanna&dates=20260627T150000%2F20260627T190000&location=Concert+Groove+Pavilion+Prospect+Park+Brooklyn+NY&details=Tornaboda+Picnic+%28BYOB%29.">Add to Google Calendar</a>
+          <button class="btn-outline" onclick="downloadEventICS('20260627T150000','20260627T190000','Tornaboda Picnic \u2013 Alessandro & Jovanna','Concert Groove Pavilion, Prospect Park, Brooklyn, NY','Tornaboda Picnic (BYOB).')">Add to Apple Calendar</button>
         </div>
         <iframe class="map-embed" loading="lazy"
           src="https://maps.google.com/maps?q=Concert+Groove+Pavilion+Prospect+Park+Brooklyn+NY&output=embed">
@@ -784,11 +785,11 @@
   <!-- ── REGISTRY ── -->
   <section id="page-registry" class="page">
     <div class="content">
-      <p class="registry-intro">Your presence to our wedding is what truly matters to us.<br>If you'd like to give a little something extra, we've set up a honeymoon fund.<br>Contribute what you wish from the list below!</p>
+      <p class="registry-intro">Your presence to our wedding is what truly matters to us.<br>If you'd like to give a little something extra, we've set up a honeymoon fund.<br>Contribute what you wish!</p>
 
       <ul class="gift-list">
         <li class="gift-item" data-gift-id="free">
-          <span class="gift-name">Honemoon Fund</span>
+          <span class="gift-name">Honeymoon Fund</span>
           <input id="free-amount" type="number" min="1" placeholder="$ amount" style="width:90px;border:1px solid #aaa;background:none;padding:5px 8px;font-size:16px;font-family:'Times New Roman',Times,serif;outline:none;">
           <div class="gift-btns">
             <button class="btn-outline" onclick="openFreeContrib('venmo')">Venmo (USD)</button>
@@ -964,7 +965,7 @@
     //   - the previous image (A) is exactly halfway through its fade-out → 50%
     //   - the next image (C) is exactly halfway through its fade-in → 50%
     const FADE = 5000;
-    const STEP = 5000;
+    const STEP = 2500;
 
     // Apply transition once to all slots
     slots.forEach(function(s) { s.style.transition = 'opacity ' + FADE + 'ms linear'; });
