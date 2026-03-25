@@ -1214,14 +1214,6 @@
     function openExternal(url) {
       window.open(url, '_blank');
     }
-    document.querySelectorAll('.gift-btns a.btn-outline').forEach(function(a) {
-      var btn = document.createElement('button');
-      btn.className = a.className;
-      btn.textContent = a.textContent;
-      var url = a.href;
-      btn.onclick = function() { openExternal(url); };
-      a.parentNode.replaceChild(btn, a);
-    });
 
     function openFreeContrib(provider) {
       const amount = parseFloat(document.getElementById('free-amount').value);
