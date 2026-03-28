@@ -1156,7 +1156,7 @@
       if (!amount || amount <= 0) { document.getElementById('free-amount').focus(); return; }
       const url = provider === 'venmo'
         ? 'https://venmo.com/Jovanna-Venegas?txn=pay&amount=' + amount + '&note=Free+Contribution&source_code=web'
-        : 'https://www.paypal.com/sendmoney?recipient=gate.gvn908%40gmail.com';
+        : 'https://paypal.me/JovannaVenegas/' + amount;
       openExternal(url);
     }
 
